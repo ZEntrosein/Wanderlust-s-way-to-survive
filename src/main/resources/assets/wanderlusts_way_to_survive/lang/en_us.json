@@ -1,0 +1,13 @@
+{
+  "itemGroup.wanderlusts_way_to_survive": "Example Mod Tab",
+  "block.wanderlusts_way_to_survive.example_block": "Example Block",
+  "item.wanderlusts_way_to_survive.example_item": "Example Item",
+
+  "wanderlusts_way_to_survive.configuration.title": "WanderlustsWayToSurvive Configs",
+  "wanderlusts_way_to_survive.configuration.section.wanderlusts_way_to_survive.common.toml": "WanderlustsWayToSurvive Configs",
+  "wanderlusts_way_to_survive.configuration.section.wanderlusts_way_to_survive.common.toml.title": "WanderlustsWayToSurvive Configs",
+  "wanderlusts_way_to_survive.configuration.items": "Item List",
+  "wanderlusts_way_to_survive.configuration.logDirtBlock": "Log Dirt Block",
+  "wanderlusts_way_to_survive.configuration.magicNumberIntroduction": "Magic Number Text",
+  "wanderlusts_way_to_survive.configuration.magicNumber": "Magic Number"
+}
