@@ -1,0 +1,10 @@
+{
+    "itemGroup.wanderlusts_way_to_survive": "漫游者的生存之道",
+    "enchantment.wanderlusts_way_to_survive.momentum": "旅者",
+    "enchantment.wanderlusts_way_to_survive.momentum.desc": "在相同方块材质上疾跑时，逐渐提升移动速度。速度上限受经验等级和附魔等级影响。",
+    "wanderlusts_way_to_survive.configuration.title": "旅者附魔配置",
+    "wanderlusts_way_to_survive.config.baseSpeedCap": "基础速度上限",
+    "wanderlusts_way_to_survive.config.xpSpeedMultiplier": "经验等级速度倍率",
+    "wanderlusts_way_to_survive.config.enchantmentLevelMultiplier": "附魔等级速度倍率",
+    "wanderlusts_way_to_survive.config.blockSpeedCaps": "方块速度上限列表"
+}

@@ -1,6 +1,6 @@
 {
   "description": {
-    "translate": "enchantment.wanderlustswaytosurvive.momentum"
+    "translate": "enchantment.wanderlusts_way_to_survive.momentum"
   },
   "supported_items": "#minecraft:enchantable/foot_armor",
   "primary_items": "#minecraft:enchantable/foot_armor",

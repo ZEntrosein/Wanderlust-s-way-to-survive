@@ -1,13 +1,10 @@
 {
-  "itemGroup.wanderlusts_way_to_survive": "Example Mod Tab",
-  "block.wanderlusts_way_to_survive.example_block": "Example Block",
-  "item.wanderlusts_way_to_survive.example_item": "Example Item",
-
-  "wanderlusts_way_to_survive.configuration.title": "WanderlustsWayToSurvive Configs",
-  "wanderlusts_way_to_survive.configuration.section.wanderlusts_way_to_survive.common.toml": "WanderlustsWayToSurvive Configs",
-  "wanderlusts_way_to_survive.configuration.section.wanderlusts_way_to_survive.common.toml.title": "WanderlustsWayToSurvive Configs",
-  "wanderlusts_way_to_survive.configuration.items": "Item List",
-  "wanderlusts_way_to_survive.configuration.logDirtBlock": "Log Dirt Block",
-  "wanderlusts_way_to_survive.configuration.magicNumberIntroduction": "Magic Number Text",
-  "wanderlusts_way_to_survive.configuration.magicNumber": "Magic Number"
+    "itemGroup.wanderlusts_way_to_survive": "Wanderlust's Way To Survive",
+    "enchantment.wanderlusts_way_to_survive.momentum": "Traveler",
+    "enchantment.wanderlusts_way_to_survive.momentum.desc": "Gradually increases movement speed when sprinting on the same block type. Speed cap is affected by experience level and enchantment level.",
+    "wanderlusts_way_to_survive.configuration.title": "Traveler Enchantment Config",
+    "wanderlusts_way_to_survive.config.baseSpeedCap": "Base Speed Cap",
+    "wanderlusts_way_to_survive.config.xpSpeedMultiplier": "XP Speed Multiplier",
+    "wanderlusts_way_to_survive.config.enchantmentLevelMultiplier": "Enchantment Level Multiplier",
+    "wanderlusts_way_to_survive.config.blockSpeedCaps": "Block Speed Caps"
 }

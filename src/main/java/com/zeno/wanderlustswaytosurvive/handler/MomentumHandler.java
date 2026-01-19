@@ -26,8 +26,14 @@ import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import java.util.List;
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import com.mojang.logging.LogUtils;
+
 @EventBusSubscriber
 public class MomentumHandler {
+    private static final Logger LOGGER = LogUtils.getLogger();
+    private static int debugTickCounter = 0;
+
     private static final UUID MOMENTUM_MODIFIER_ID = UUID.fromString("12345678-1234-1234-1234-1234567890ab");
     // Use a fixed ResourceLocation for the attribute modifier in 1.21 if needed,
     // but UUID is still used in code often.
@@ -43,21 +49,21 @@ public class MomentumHandler {
 
         MomentumData data = player.getData(ModAttachmentTypes.MOMENTUM);
 
-        // 1. Check Enchantment
-        var momentumHolderInfo = player.registryAccess()
-                .registryOrThrow(Registries.ENCHANTMENT)
-                .getHolder(ModEnchantments.MOMENTUM);
-
-        if (momentumHolderInfo.isEmpty())
-            return;
-
-        int enchantmentLevel = EnchantmentHelper.getItemEnchantmentLevel(
-                momentumHolderInfo.get(),
-                player.getItemBySlot(EquipmentSlot.FEET));
+        // 1. Check Enchantment using ItemEnchantments component (works for datapack
+        // enchantments)
+        var boots = player.getItemBySlot(EquipmentSlot.FEET);
+        int enchantmentLevel = getEnchantmentLevelByKey(boots, ModEnchantments.MOMENTUM);
 
         if (enchantmentLevel <= 0) {
             if (data.getCurrentSpeedBonus() > 0) {
                 resetMomentum(player, data);
+            }
+            // Debug: No enchantment on boots
+            debugTickCounter++;
+            if (debugTickCounter >= 20) {
+                debugTickCounter = 0;
+                LOGGER.info("[Traveler Debug] Player {} has no Traveler enchantment on boots (level: {})",
+                        player.getName().getString(), enchantmentLevel);
             }
             return;
         }
@@ -66,29 +72,45 @@ public class MomentumHandler {
         // We only build momentum if on ground and sprinting.
         // If in air, we maintain it (or decay slowly? Plan says seamless transition via
         // jumping).
-        // For now: Maintain if jumping, Reset if stopped or distinctive block change.
+        // For now: Maintain if jumping, Reset only on distinctive block change.
+        // NOTE: We do NOT reset when player stops moving - only when block type
+        // changes.
+        // This allows maintaining momentum through grass and other slowdown blocks.
 
-        BlockState stateBelow = player.getBlockStateOn();
-        Block blockBelow = stateBelow.getBlock();
+        // Get the actual ground block (skip non-solid blocks like grass, flowers, etc.)
+        Block blockBelow = getActualGroundBlock(player);
 
-        boolean isSprinting = player.isSprinting();
         boolean isOnGround = player.onGround();
+        boolean isSprinting = player.isSprinting();
 
-        // If stopped moving or sneaking, reset
-        if (!isSprinting && isOnGround
-                && (Math.abs(player.getDeltaMovement().x) < 0.01 && Math.abs(player.getDeltaMovement().z) < 0.01)) {
-            // Reset if completely stopped? Or just decay?
-            // "Accelerate continuously on same material" implies stopping resets it.
-            resetMomentum(player, data);
-            return;
+        // Check if player is actively moving (for accumulation, not reset)
+        double horizontalSpeed = Math.sqrt(
+                player.getDeltaMovement().x * player.getDeltaMovement().x +
+                        player.getDeltaMovement().z * player.getDeltaMovement().z);
+        boolean isMoving = horizontalSpeed > 0.001;
+
+        // Debug: Log block detection
+        debugTickCounter++;
+        if (debugTickCounter >= 20) {
+            Block lastBlock = data.getLastBlock();
+            LOGGER.info(
+                    "[Traveler Debug] Ground Detection - blockBelow: {}, lastBlock: {}, onGround: {}, isMoving: {}, speed: {}",
+                    blockBelow != null ? BuiltInRegistries.BLOCK.getKey(blockBelow) : "null",
+                    lastBlock != null ? BuiltInRegistries.BLOCK.getKey(lastBlock) : "null",
+                    isOnGround,
+                    isMoving,
+                    String.format("%.4f", horizontalSpeed));
         }
 
-        if (isOnGround) {
+        if (isOnGround && blockBelow != null) {
             // Check Material match
             if (blockBelow != data.getLastBlock()
                     && data.getLastBlock() != net.minecraft.world.level.block.Blocks.AIR) {
                 // Material Changed!
                 // Reset momentum
+                LOGGER.info("[Traveler Debug] RESET: Block changed from {} to {}",
+                        data.getLastBlock() != null ? BuiltInRegistries.BLOCK.getKey(data.getLastBlock()) : "null",
+                        BuiltInRegistries.BLOCK.getKey(blockBelow));
                 resetMomentum(player, data);
                 data.setLastBlock(blockBelow);
             } else {
@@ -98,6 +120,11 @@ public class MomentumHandler {
                 // Accumulate Speed
                 accumulateMomentum(player, data, blockBelow, enchantmentLevel);
             }
+        } else if (isOnGround && blockBelow == null) {
+            // On something non-solid - just maintain current state, don't reset
+            if (debugTickCounter >= 20) {
+                LOGGER.info("[Traveler Debug] On non-solid block, maintaining momentum");
+            }
         } else {
             // In Air
             // Maintain momentum? Or decay?
@@ -105,8 +132,24 @@ public class MomentumHandler {
             // Do nothing, just apply current speed.
         }
 
+        // Reset debug counter if it reached threshold
+        if (debugTickCounter >= 20) {
+            debugTickCounter = 0;
+        }
+
         // Apply Attribute
         applySpeedModifier(player, data.getCurrentSpeedBonus());
+
+        // Debug: Print speed every second (20 ticks)
+        debugTickCounter++;
+        if (debugTickCounter >= 20) {
+            debugTickCounter = 0;
+            LOGGER.info("[Traveler Debug] Player: {}, Speed Bonus: {}, Ticks on Material: {}, Block: {}",
+                    player.getName().getString(),
+                    String.format("%.4f", data.getCurrentSpeedBonus()),
+                    data.getTicksOnMaterial(),
+                    data.getLastBlock() != null ? BuiltInRegistries.BLOCK.getKey(data.getLastBlock()) : "null");
+        }
     }
 
     private static void accumulateMomentum(Player player, MomentumData data, Block block, int enchantmentLevel) {
@@ -174,5 +217,69 @@ public class MomentumHandler {
             }
         }
         return -1;
+    }
+
+    /**
+     * Get enchantment level by ResourceKey from an ItemStack.
+     * Works with datapack-driven enchantments in 1.21+.
+     */
+    private static int getEnchantmentLevelByKey(net.minecraft.world.item.ItemStack stack,
+            ResourceKey<Enchantment> enchantmentKey) {
+        if (stack.isEmpty())
+            return 0;
+
+        net.minecraft.world.item.enchantment.ItemEnchantments enchantments = stack.getOrDefault(
+                net.minecraft.core.component.DataComponents.ENCHANTMENTS,
+                net.minecraft.world.item.enchantment.ItemEnchantments.EMPTY);
+
+        // Debug: Print all enchantments on the item
+        if (!enchantments.isEmpty()) {
+            LOGGER.info("[Traveler Debug] Checking boots for enchantment: {}", enchantmentKey.location());
+            for (var entry : enchantments.entrySet()) {
+                var holder = entry.getKey();
+                var keyOpt = holder.unwrapKey();
+                if (keyOpt.isPresent()) {
+                    LOGGER.info("[Traveler Debug]   Found enchantment: {} (level {})",
+                            keyOpt.get().location(), entry.getIntValue());
+                    if (keyOpt.get().equals(enchantmentKey)) {
+                        return entry.getIntValue();
+                    }
+                }
+            }
+        }
+        return 0;
+    }
+
+    /**
+     * Get the actual solid ground block under the player, skipping non-collidable
+     * blocks
+     * like tall grass, flowers, etc.
+     * Returns null if no solid block found within 2 blocks below player.
+     */
+    private static Block getActualGroundBlock(Player player) {
+        net.minecraft.core.BlockPos playerPos = player.blockPosition();
+        net.minecraft.world.level.Level level = player.level();
+
+        // Check blocks from player's feet position down
+        for (int y = 0; y >= -2; y--) {
+            net.minecraft.core.BlockPos checkPos = playerPos.offset(0, y, 0);
+            BlockState state = level.getBlockState(checkPos);
+            Block block = state.getBlock();
+
+            // Skip air
+            if (state.isAir())
+                continue;
+
+            // Skip non-collidable blocks (grass, flowers, etc.)
+            // These blocks don't have collision and player walks through them
+            if (!state.getCollisionShape(level, checkPos).isEmpty()) {
+                return block;
+            }
+
+            // Also check if the block is tagged as replaceable (like tall grass)
+            // These shouldn't count for momentum tracking
+        }
+
+        return null;
     }
 }
