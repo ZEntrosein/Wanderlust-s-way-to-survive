@@ -18,16 +18,24 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.MovementInputUpdateEvent;
 
+/**
+ * 边缘保护处理器 - 客户端功能
+ * 当玩家高速移动时，如果即将进入不同类型的方块，自动停止输入
+ * 防止玩家因高速而失控冲入悬崖或其他区域
+ */
 @EventBusSubscriber(modid = WanderlustsWayToSurvive.MOD_ID, value = Dist.CLIENT)
 public class EdgeProtectionHandler {
 
+    /**
+     * 输入更新事件 - 在客户端检查并可能取消移动输入
+     */
     @SubscribeEvent
     public static void onInputUpdate(MovementInputUpdateEvent event) {
         if (!(event.getEntity() instanceof LocalPlayer player))
             return;
 
-        // 1. Check Enchantment
-        // Note: EnchantmentHelper on client should work if tags are synced.
+        // 1. 检查附魔
+        // 注意：客户端的EnchantmentHelper应该可以工作（如果标签已同步）
         var momentumHolderInfo = player.registryAccess()
                 .registryOrThrow(Registries.ENCHANTMENT)
                 .getHolder(ModEnchantments.MOMENTUM);
@@ -42,64 +50,58 @@ public class EdgeProtectionHandler {
         if (enchantmentLevel <= 0)
             return;
 
-        // 2. Check Conditions: On Ground, Not Jumping, Sprinting
-        // Input.jumping is true if space is held.
+        // 2. 检查条件：在地面、没有跳跃、正在疾跑
+        // input.jumping为true表示正在按住空格键
         if (!player.onGround() || event.getInput().jumping || !player.isSprinting()) {
             return;
         }
 
-        // 3. Check Speed Threshold
-        // Configurable threshold? Let's say if speed > base speed + something.
+        // 3. 检查速度阈值
+        // 只有当速度足够高时才启用边缘保护
         double currentSpeed = player.getAttributeValue(Attributes.MOVEMENT_SPEED);
-        // Default player speed is 0.1. Sprinting adds. Momentum adds more.
-        // Let's assume a threshold of 0.2 (twice base walk speed).
-        // Using config if possible, or hardcoded for now.
-        double threshold = MomentumConfig.INSTANCE.baseSpeedCap.get() * 0.5 + 0.1; // Rough heuristic
+        // 默认玩家速度是0.1，疾跑会增加，动量会进一步增加
+        // 设定阈值为0.2（大约是基础行走速度的两倍）
+        double threshold = MomentumConfig.INSTANCE.baseSpeedCap.get() * 0.5 + 0.1; // 粗略估算
 
         if (currentSpeed < threshold)
             return;
 
-        // 4. Predict movement
-        // We look at Input forward/left/right
+        // 4. 预测移动方向
+        // 检查输入的前进/左/右状态
         float forward = event.getInput().forwardImpulse;
-        float strafe = event.getInput().leftImpulse; // check naming
+        float strafe = event.getInput().leftImpulse;
 
         if (forward == 0 && strafe == 0)
             return;
 
-        // Simple check: Look 1 block ahead in look direction
-        // Or accurate check: player velocity direction
+        // 简单检查：查看玩家视角前方1格
         Vec3 lookAngle = player.getLookAngle();
-        // Flatten look vector
+        // 将视角向量投影到水平面
         lookAngle = new Vec3(lookAngle.x, 0, lookAngle.z).normalize();
 
-        // Calculate predicted position relative to feet
-        // If moving forward:
-        double checkDist = 0.6; // slightly outside hitbox
+        // 计算预测位置（相对于脚部）
+        // 如果正在向前移动：
+        double checkDist = 0.6; // 稍微超出碰撞箱
         Vec3 checkPos = player.position().add(lookAngle.scale(checkDist));
 
         BlockPos currentPos = player.blockPosition();
         BlockPos nextPos = BlockPos.containing(checkPos);
 
         if (currentPos.equals(nextPos))
-            return; // Still in same block
+            return; // 仍在同一方块内
 
         BlockState currentState = player.level().getBlockState(currentPos);
         BlockState nextState = player.level().getBlockState(nextPos);
 
-        // If blocks are different (and next is not Air? No, we don't want to run into
-        // air either ideally?
-        // Wait, "Edge Protection" usually means "Don't fall off".
-        // But the requirement says "Entering different material".
-        // So checking block type equality is correct.
-
+        // 如果当前方块和下一方块类型不同，则触发边缘保护
+        // "边缘保护"的目的是防止玩家因高速而误入不同区域
         if (currentState.getBlock() != nextState.getBlock()) {
-            // Block type mismatch! Stop input.
+            // 方块类型不同！停止输入
             event.getInput().forwardImpulse = 0;
             event.getInput().leftImpulse = 0;
 
-            // Maybe tiny backward push or visual shake?
-            // For now just stop input.
+            // 可以添加轻微的后退推力或视觉震动效果
+            // 目前只是停止输入
         }
     }
 }

@@ -6,6 +6,10 @@ import org.apache.commons.lang3.tuple.Pair;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * 旅者附魔配置类
+ * 使用NeoForge的配置系统定义可调整的参数
+ */
 public class MomentumConfig {
         public static final ModConfigSpec SPEC;
         public static final MomentumConfig INSTANCE;
@@ -16,9 +20,13 @@ public class MomentumConfig {
                 INSTANCE = pair.getLeft();
         }
 
+        // 基础速度上限
         public final ModConfigSpec.DoubleValue baseSpeedCap;
+        // 经验等级速度倍率
         public final ModConfigSpec.DoubleValue xpSpeedMultiplier;
+        // 附魔等级速度倍率
         public final ModConfigSpec.DoubleValue enchantmentLevelMultiplier;
+        // 方块特定速度上限列表
         public final ModConfigSpec.ConfigValue<List<? extends String>> blockSpeedCaps;
 
         MomentumConfig(ModConfigSpec.Builder builder) {
@@ -58,7 +66,8 @@ public class MomentumConfig {
         }
 
         /**
-         * Validates a block speed entry in the format "modid:blockid,cap_value"
+         * 验证方块速度条目格式
+         * 格式：'modid:blockid,上限值'
          */
         private static boolean validateBlockSpeedEntry(Object entry) {
                 if (!(entry instanceof String str))
@@ -66,10 +75,10 @@ public class MomentumConfig {
                 String[] parts = str.split(",");
                 if (parts.length != 2)
                         return false;
-                // Check block ID format
+                // 检查方块ID格式（必须包含冒号）
                 if (!parts[0].contains(":"))
                         return false;
-                // Check cap value is a number
+                // 检查上限值是否为数字
                 try {
                         Double.parseDouble(parts[1].trim());
                         return true;

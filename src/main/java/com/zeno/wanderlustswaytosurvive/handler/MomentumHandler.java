@@ -29,28 +29,32 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import com.mojang.logging.LogUtils;
 
+/**
+ * 动量处理器 - 处理旅者附魔的速度累积和应用
+ * 在服务端每tick执行，根据玩家脚下的方块类型累积速度加成
+ */
 @EventBusSubscriber
 public class MomentumHandler {
     private static final Logger LOGGER = LogUtils.getLogger();
     private static int debugTickCounter = 0;
 
     private static final UUID MOMENTUM_MODIFIER_ID = UUID.fromString("12345678-1234-1234-1234-1234567890ab");
-    // Use a fixed ResourceLocation for the attribute modifier in 1.21 if needed,
-    // but UUID is still used in code often.
-    // NeoForge/Vanilla 1.21 might prefer ResourceLocation for modifiers.
+    // 属性修改器的ResourceLocation（1.21中推荐使用RL而非UUID）
     private static final ResourceLocation MOMENTUM_MODIFIER_RL = ResourceLocation
             .fromNamespaceAndPath("wanderlustswaytosurvive", "momentum_bonus");
 
+    /**
+     * 玩家tick事件处理 - 每tick检查并更新速度加成
+     */
     @SubscribeEvent
     public static void onPlayerTick(PlayerTickEvent.Post event) {
         Player player = event.getEntity();
         if (player.level().isClientSide)
-            return; // Logic on server side, attributes sync to client
+            return; // 只在服务端处理，属性会自动同步到客户端
 
         MomentumData data = player.getData(ModAttachmentTypes.MOMENTUM);
 
-        // 1. Check Enchantment using ItemEnchantments component (works for datapack
-        // enchantments)
+        // 1. 检查附魔（使用ItemEnchantments组件，支持数据包驱动的附魔）
         var boots = player.getItemBySlot(EquipmentSlot.FEET);
         int enchantmentLevel = getEnchantmentLevelByKey(boots, ModEnchantments.MOMENTUM);
 
@@ -58,43 +62,39 @@ public class MomentumHandler {
             if (data.getCurrentSpeedBonus() > 0) {
                 resetMomentum(player, data);
             }
-            // Debug: No enchantment on boots
+            // 调试：靴子没有旅者附魔
             debugTickCounter++;
             if (debugTickCounter >= 20) {
                 debugTickCounter = 0;
-                LOGGER.info("[Traveler Debug] Player {} has no Traveler enchantment on boots (level: {})",
+                LOGGER.info("[旅者调试] 玩家 {} 的靴子没有旅者附魔（等级：{}）",
                         player.getName().getString(), enchantmentLevel);
             }
             return;
         }
 
-        // 2. Check Movement State (Sprinting + On Ground)
-        // We only build momentum if on ground and sprinting.
-        // If in air, we maintain it (or decay slowly? Plan says seamless transition via
-        // jumping).
-        // For now: Maintain if jumping, Reset only on distinctive block change.
-        // NOTE: We do NOT reset when player stops moving - only when block type
-        // changes.
-        // This allows maintaining momentum through grass and other slowdown blocks.
+        // 2. 检查移动状态
+        // 只在地面上奔跑时累积动量。在空中时保持动量（跳跃可无缝切换）
+        // 注意：玩家停止移动时不重置 - 只在方块类型改变时重置
+        // 这样可以在穿过草丛等减速方块时保持动量
 
-        // Get the actual ground block (skip non-solid blocks like grass, flowers, etc.)
+        // 获取实际的地面方块（跳过草丛、花朵等非实心方块）
         Block blockBelow = getActualGroundBlock(player);
 
         boolean isOnGround = player.onGround();
         boolean isSprinting = player.isSprinting();
 
-        // Check if player is actively moving (for accumulation, not reset)
+        // 检查玩家是否正在移动（用于累积，不用于重置）
         double horizontalSpeed = Math.sqrt(
                 player.getDeltaMovement().x * player.getDeltaMovement().x +
                         player.getDeltaMovement().z * player.getDeltaMovement().z);
         boolean isMoving = horizontalSpeed > 0.001;
 
-        // Debug: Log block detection
+        // 调试：每秒输出一次方块检测信息
         debugTickCounter++;
         if (debugTickCounter >= 20) {
             Block lastBlock = data.getLastBlock();
             LOGGER.info(
-                    "[Traveler Debug] Ground Detection - blockBelow: {}, lastBlock: {}, onGround: {}, isMoving: {}, speed: {}",
+                    "[旅者调试] 地面检测 - 当前方块: {}, 上一方块: {}, 在地面: {}, 移动中: {}, 速度: {}",
                     blockBelow != null ? BuiltInRegistries.BLOCK.getKey(blockBelow) : "null",
                     lastBlock != null ? BuiltInRegistries.BLOCK.getKey(lastBlock) : "null",
                     isOnGround,
@@ -103,48 +103,44 @@ public class MomentumHandler {
         }
 
         if (isOnGround && blockBelow != null) {
-            // Check Material match
+            // 检查方块类型是否改变
             if (blockBelow != data.getLastBlock()
                     && data.getLastBlock() != net.minecraft.world.level.block.Blocks.AIR) {
-                // Material Changed!
-                // Reset momentum
-                LOGGER.info("[Traveler Debug] RESET: Block changed from {} to {}",
+                // 方块改变了！重置动量
+                LOGGER.info("[旅者调试] 重置：方块从 {} 变为 {}",
                         data.getLastBlock() != null ? BuiltInRegistries.BLOCK.getKey(data.getLastBlock()) : "null",
                         BuiltInRegistries.BLOCK.getKey(blockBelow));
                 resetMomentum(player, data);
                 data.setLastBlock(blockBelow);
             } else {
-                // Same material or started fresh
+                // 同一方块类型或刚开始
                 data.setLastBlock(blockBelow);
 
-                // Accumulate Speed
+                // 累积速度
                 accumulateMomentum(player, data, blockBelow, enchantmentLevel);
             }
         } else if (isOnGround && blockBelow == null) {
-            // On something non-solid - just maintain current state, don't reset
+            // 在非实心方块上 - 保持当前状态，不重置
             if (debugTickCounter >= 20) {
-                LOGGER.info("[Traveler Debug] On non-solid block, maintaining momentum");
+                LOGGER.info("[旅者调试] 在非实心方块上，保持动量");
             }
         } else {
-            // In Air
-            // Maintain momentum? Or decay?
-            // "Seamless switching" implies maintaining.
-            // Do nothing, just apply current speed.
+            // 在空中 - 保持动量（跳跃时无缝切换）
         }
 
-        // Reset debug counter if it reached threshold
+        // 重置调试计数器
         if (debugTickCounter >= 20) {
             debugTickCounter = 0;
         }
 
-        // Apply Attribute
+        // 应用速度属性修改
         applySpeedModifier(player, data.getCurrentSpeedBonus());
 
-        // Debug: Print speed every second (20 ticks)
+        // 调试：每秒输出一次速度信息
         debugTickCounter++;
         if (debugTickCounter >= 20) {
             debugTickCounter = 0;
-            LOGGER.info("[Traveler Debug] Player: {}, Speed Bonus: {}, Ticks on Material: {}, Block: {}",
+            LOGGER.info("[旅者调试] 玩家: {}, 速度加成: {}, 材质tick数: {}, 方块: {}",
                     player.getName().getString(),
                     String.format("%.4f", data.getCurrentSpeedBonus()),
                     data.getTicksOnMaterial(),
@@ -152,27 +148,30 @@ public class MomentumHandler {
         }
     }
 
+    /**
+     * 累积动量 - 根据配置计算并增加速度加成
+     * 公式：速度上限 = (基础上限或方块上限 + 经验加成) × (1 + 附魔等级 × 附魔倍率)
+     * 加速率 = 速度上限 / 100（5秒达到上限）
+     */
     private static void accumulateMomentum(Player player, MomentumData data, Block block, int enchantmentLevel) {
         data.setTicksOnMaterial(data.getTicksOnMaterial() + 1);
 
-        // Calculate Cap
+        // 计算速度上限
         double baseCap = MomentumConfig.INSTANCE.baseSpeedCap.get();
         double xpBonus = player.experienceLevel * MomentumConfig.INSTANCE.xpSpeedMultiplier.get();
 
-        // Block Cap overwrite
+        // 检查是否有方块特定的速度上限
         ResourceLocation blockRL = BuiltInRegistries.BLOCK.getKey(block);
         double blockCap = getAllConfigBlockCaps(blockRL);
 
-        // Use the higher of base or block specific? Or just block specific overrides
-        // base?
-        // Let's say Map overrides Base if present. Otherwise Base.
+        // 如果配置中有该方块的上限则使用，否则使用基础上限
         double capBaseValue = (blockCap >= 0) ? blockCap : baseCap;
 
+        // 计算最终速度上限
         double totalCap = (capBaseValue + xpBonus)
                 * (1 + (enchantmentLevel * MomentumConfig.INSTANCE.enchantmentLevelMultiplier.get()));
 
-        // Acceleration rate
-        // Let's say it takes 5 seconds (100 ticks) to reach cap.
+        // 加速率：5秒（100 ticks）达到上限
         float acceleration = (float) (totalCap / 100.0f);
 
         if (data.getCurrentSpeedBonus() < totalCap) {
@@ -180,6 +179,9 @@ public class MomentumHandler {
         }
     }
 
+    /**
+     * 重置动量 - 将所有状态归零
+     */
     private static void resetMomentum(Player player, MomentumData data) {
         data.setCurrentSpeedBonus(0);
         data.setTicksOnMaterial(0);
@@ -187,6 +189,9 @@ public class MomentumHandler {
         applySpeedModifier(player, 0);
     }
 
+    /**
+     * 应用速度修改器 - 将速度加成应用到玩家的移动速度属性上
+     */
     private static void applySpeedModifier(Player player, float value) {
         AttributeInstance attribute = player.getAttribute(Attributes.MOVEMENT_SPEED);
         if (attribute != null) {
@@ -200,9 +205,12 @@ public class MomentumHandler {
         }
     }
 
+    /**
+     * 从配置中获取特定方块的速度上限
+     * 配置格式："modid:block,上限值"
+     * 返回 -1 表示未找到
+     */
     private static double getAllConfigBlockCaps(ResourceLocation blockRL) {
-        // Implement parsing properly.
-        // List<String> format: "modid:block,cap"
         List<? extends String> caps = MomentumConfig.INSTANCE.blockSpeedCaps.get();
         for (String s : caps) {
             String[] parts = s.split(",");
@@ -220,8 +228,8 @@ public class MomentumHandler {
     }
 
     /**
-     * Get enchantment level by ResourceKey from an ItemStack.
-     * Works with datapack-driven enchantments in 1.21+.
+     * 通过ResourceKey从物品栈获取附魔等级
+     * 支持1.21+的数据包驱动附魔
      */
     private static int getEnchantmentLevelByKey(net.minecraft.world.item.ItemStack stack,
             ResourceKey<Enchantment> enchantmentKey) {
@@ -232,14 +240,14 @@ public class MomentumHandler {
                 net.minecraft.core.component.DataComponents.ENCHANTMENTS,
                 net.minecraft.world.item.enchantment.ItemEnchantments.EMPTY);
 
-        // Debug: Print all enchantments on the item
+        // 调试：输出物品上的所有附魔
         if (!enchantments.isEmpty()) {
-            LOGGER.info("[Traveler Debug] Checking boots for enchantment: {}", enchantmentKey.location());
+            LOGGER.info("[旅者调试] 检查靴子附魔: {}", enchantmentKey.location());
             for (var entry : enchantments.entrySet()) {
                 var holder = entry.getKey();
                 var keyOpt = holder.unwrapKey();
                 if (keyOpt.isPresent()) {
-                    LOGGER.info("[Traveler Debug]   Found enchantment: {} (level {})",
+                    LOGGER.info("[旅者调试]   发现附魔: {} (等级 {})",
                             keyOpt.get().location(), entry.getIntValue());
                     if (keyOpt.get().equals(enchantmentKey)) {
                         return entry.getIntValue();
@@ -251,33 +259,29 @@ public class MomentumHandler {
     }
 
     /**
-     * Get the actual solid ground block under the player, skipping non-collidable
-     * blocks
-     * like tall grass, flowers, etc.
-     * Returns null if no solid block found within 2 blocks below player.
+     * 获取玩家脚下的实际实心方块
+     * 跳过草丛、花朵等没有碰撞体积的方块
+     * 如果在玩家下方2格内找不到实心方块则返回null
      */
     private static Block getActualGroundBlock(Player player) {
         net.minecraft.core.BlockPos playerPos = player.blockPosition();
         net.minecraft.world.level.Level level = player.level();
 
-        // Check blocks from player's feet position down
+        // 从玩家脚部位置向下检查
         for (int y = 0; y >= -2; y--) {
             net.minecraft.core.BlockPos checkPos = playerPos.offset(0, y, 0);
             BlockState state = level.getBlockState(checkPos);
             Block block = state.getBlock();
 
-            // Skip air
+            // 跳过空气
             if (state.isAir())
                 continue;
 
-            // Skip non-collidable blocks (grass, flowers, etc.)
-            // These blocks don't have collision and player walks through them
+            // 跳过没有碰撞体积的方块（草丛、花朵等）
+            // 这些方块玩家可以直接穿过
             if (!state.getCollisionShape(level, checkPos).isEmpty()) {
                 return block;
             }
-
-            // Also check if the block is tagged as replaceable (like tall grass)
-            // These shouldn't count for momentum tracking
         }
 
         return null;
