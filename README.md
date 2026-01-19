@@ -76,6 +76,18 @@
 
 ---
 
+### 4. 骑马珍珠传送 (Horse Ender Pearl Teleport)
+
+#### 功能描述
+骑马时使用**末影珍珠**，马匹会随玩家一起传送到目的地。
+
+#### 配置项
+| 配置项 | 描述 | 默认值 |
+|--------|------|--------|
+| `enableHorseEnderPearlTeleport` | 启用骑马珍珠传送 | true |
+
+---
+
 ## 配置文件
 
 配置文件位于：`config/wanderlusts_way_to_survive-common.toml`
@@ -96,7 +108,8 @@ src/main/java/com/zeno/wanderlustswaytosurvive/
 │   └── MomentumConfig.java         # 配置类（含旅者+苦力怕设置）
 ├── handler/
 │   ├── MomentumHandler.java        # 旅者附魔逻辑（服务端）
-│   └── EdgeProtectionHandler.java  # 边缘保护（客户端）
+│   ├── EdgeProtectionHandler.java  # 边缘保护（客户端）
+│   └── EnderPearlTeleportHandler.java # 骑马珍珠传送
 ├── mixin/
 │   ├── CreeperMixin.java           # 苦力怕爆炸 Mixin
 │   └── LeavesBlockMixin.java       # 骑马穿叶 Mixin

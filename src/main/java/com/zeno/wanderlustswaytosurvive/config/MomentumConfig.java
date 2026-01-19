@@ -34,6 +34,7 @@ public class MomentumConfig {
         // ==================== 马匹设置 ====================
         public final ModConfigSpec.BooleanValue enableHorseLeafPassthrough;
         public final ModConfigSpec.IntValue horseLeafGracePeriod;
+        public final ModConfigSpec.BooleanValue enableHorseEnderPearlTeleport;
 
         MomentumConfig(ModConfigSpec.Builder builder) {
                 // Traveler Settings
@@ -108,6 +109,12 @@ public class MomentumConfig {
                                 .comment("离开非树叶地面后的宽限期（毫秒），在此期间树叶仍可穿过。默认值：500")
                                 .translation("wanderlusts_way_to_survive.config.horse.horseLeafGracePeriod")
                                 .defineInRange("horseLeafGracePeriod", 500, 0, 5000);
+
+                enableHorseEnderPearlTeleport = builder
+                                .comment("Allow horses to teleport with the player when using ender pearls.")
+                                .comment("使用末影珍珠时，骑乘的马匹一起传送。")
+                                .translation("wanderlusts_way_to_survive.config.horse.enableHorseEnderPearlTeleport")
+                                .define("enableHorseEnderPearlTeleport", true);
 
                 builder.pop();
         }
