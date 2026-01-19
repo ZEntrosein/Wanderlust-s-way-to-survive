@@ -14,6 +14,5 @@
     "wanderlusts_way_to_survive.config.creeper.minHealthMultiplier": "Min Health Explosion Multiplier",
     "wanderlusts_way_to_survive.configuration.horse": "Horse Settings",
     "wanderlusts_way_to_survive.config.horse.enableHorseLeafPassthrough": "Enable Horse Leaf Passthrough",
-    "wanderlusts_way_to_survive.config.horse.horseLeafGracePeriod": "Leaf Passthrough Grace Period (ms)",
-    "wanderlusts_way_to_survive.config.horse.enableHorseEnderPearlTeleport": "Enable Horse Ender Pearl Teleport"
+    "wanderlusts_way_to_survive.config.horse.horseLeafGracePeriod": "Leaf Passthrough Grace Period (ms)"
 }

@@ -76,15 +76,22 @@
 
 ---
 
-### 4. 骑马珍珠传送 (Horse Ender Pearl Teleport)
+### 4. 骑乘末影珍珠传送 (Mounted Pearl Teleport)
 
 #### 功能描述
-骑马时使用**末影珍珠**，马匹会随玩家一起传送到目的地。
+骑乘坐骑（马、骆驼等）时使用末影珍珠，**坐骑会跟随玩家一起传送**到目的地，传送后仍保持骑乘状态。
+
+#### 工作原理
+1. 检测到玩家骑乘时使用末影珍珠
+2. 记录坐骑信息，玩家暂时下马
+3. 传送后在数个 tick 内同步坐骑位置
+4. 自动让玩家重新骑上坐骑
 
 #### 配置项
 | 配置项 | 描述 | 默认值 |
 |--------|------|--------|
-| `enableHorseEnderPearlTeleport` | 启用骑马珍珠传送 | true |
+| `enableMountedPearlTeleport` | 启用骑乘传送 | true |
+| `mountedPearlSyncTicks` | 坐骑位置同步 tick 数 | 3 |
 
 ---
 
@@ -103,13 +110,14 @@
 src/main/java/com/zeno/wanderlustswaytosurvive/
 ├── WanderlustsWayToSurvive.java    # 模组主类
 ├── attachment/
-│   └── MomentumData.java           # 动量数据附件
+│   ├── MomentumData.java           # 动量数据附件
+│   └── MountedPearlData.java       # 骑乘传送数据附件
 ├── config/
-│   └── MomentumConfig.java         # 配置类（含旅者+苦力怕设置）
+│   └── MomentumConfig.java         # 配置类
 ├── handler/
 │   ├── MomentumHandler.java        # 旅者附魔逻辑（服务端）
 │   ├── EdgeProtectionHandler.java  # 边缘保护（客户端）
-│   └── EnderPearlTeleportHandler.java # 骑马珍珠传送
+│   └── MountedPearlHandler.java    # 骑乘传送逻辑
 ├── mixin/
 │   ├── CreeperMixin.java           # 苦力怕爆炸 Mixin
 │   └── LeavesBlockMixin.java       # 骑马穿叶 Mixin

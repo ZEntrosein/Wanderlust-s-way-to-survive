@@ -14,6 +14,5 @@
     "wanderlusts_way_to_survive.config.creeper.minHealthMultiplier": "残血爆炸倍率",
     "wanderlusts_way_to_survive.configuration.horse": "马匹设置",
     "wanderlusts_way_to_survive.config.horse.enableHorseLeafPassthrough": "启用骑马穿叶",
-    "wanderlusts_way_to_survive.config.horse.horseLeafGracePeriod": "穿叶宽限期(毫秒)",
-    "wanderlusts_way_to_survive.config.horse.enableHorseEnderPearlTeleport": "启用骑马珍珠传送"
+    "wanderlusts_way_to_survive.config.horse.horseLeafGracePeriod": "穿叶宽限期(毫秒)"
 }

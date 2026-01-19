@@ -34,7 +34,10 @@ public class MomentumConfig {
         // ==================== 马匹设置 ====================
         public final ModConfigSpec.BooleanValue enableHorseLeafPassthrough;
         public final ModConfigSpec.IntValue horseLeafGracePeriod;
-        public final ModConfigSpec.BooleanValue enableHorseEnderPearlTeleport;
+
+        // ==================== 末影珍珠传送设置 ====================
+        public final ModConfigSpec.BooleanValue enableMountedPearlTeleport;
+        public final ModConfigSpec.IntValue mountedPearlSyncTicks;
 
         MomentumConfig(ModConfigSpec.Builder builder) {
                 // Traveler Settings
@@ -110,11 +113,22 @@ public class MomentumConfig {
                                 .translation("wanderlusts_way_to_survive.config.horse.horseLeafGracePeriod")
                                 .defineInRange("horseLeafGracePeriod", 500, 0, 5000);
 
-                enableHorseEnderPearlTeleport = builder
-                                .comment("Allow horses to teleport with the player when using ender pearls.")
-                                .comment("使用末影珍珠时，骑乘的马匹一起传送。")
-                                .translation("wanderlusts_way_to_survive.config.horse.enableHorseEnderPearlTeleport")
-                                .define("enableHorseEnderPearlTeleport", true);
+                builder.pop();
+
+                // Mounted Pearl Settings
+                builder.comment("Settings for Mounted Ender Pearl Teleportation").push("mountedPearl");
+
+                enableMountedPearlTeleport = builder
+                                .comment("Allow mounts to teleport with the player when using Ender Pearls.")
+                                .comment("允许骑乘坐骑时使用末影珍珠传送，坐骑会跟随一起传送。")
+                                .translation("wanderlusts_way_to_survive.config.mountedPearl.enableMountedPearlTeleport")
+                                .define("enableMountedPearlTeleport", true);
+
+                mountedPearlSyncTicks = builder
+                                .comment("Number of ticks to synchronize mount position before player remounts. Default: 3")
+                                .comment("玩家重新骑乘前同步坐骑位置的tick数。默认值：3")
+                                .translation("wanderlusts_way_to_survive.config.mountedPearl.mountedPearlSyncTicks")
+                                .defineInRange("mountedPearlSyncTicks", 3, 1, 20);
 
                 builder.pop();
         }
