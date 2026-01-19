@@ -1,10 +1,18 @@
 {
     "itemGroup.wanderlusts_way_to_survive": "Wanderlust's Way To Survive",
-    "enchantment.wanderlusts_way_to_survive.momentum": "Traveler",
-    "enchantment.wanderlusts_way_to_survive.momentum.desc": "Gradually increases movement speed when sprinting on the same block type. Speed cap is affected by experience level and enchantment level.",
+    "enchantment.wanderlusts_way_to_survive.trek": "Trek",
+    "enchantment.wanderlusts_way_to_survive.trek.desc": "Gradually increases movement speed when sprinting on the same block type. Speed cap is affected by experience level and enchantment level.",
     "wanderlusts_way_to_survive.configuration.title": "Traveler Enchantment Config",
+    "wanderlusts_way_to_survive.configuration.traveler": "Traveler Settings",
+    "wanderlusts_way_to_survive.configuration.creeper": "Creeper Settings",
     "wanderlusts_way_to_survive.config.baseSpeedCap": "Base Speed Cap",
     "wanderlusts_way_to_survive.config.xpSpeedMultiplier": "XP Speed Multiplier",
     "wanderlusts_way_to_survive.config.enchantmentLevelMultiplier": "Enchantment Level Multiplier",
-    "wanderlusts_way_to_survive.config.blockSpeedCaps": "Block Speed Caps"
+    "wanderlusts_way_to_survive.config.blockSpeedCaps": "Block Speed Caps",
+    "wanderlusts_way_to_survive.config.creeper.enableCreeperScaling": "Enable Dynamic Creeper Explosion",
+    "wanderlusts_way_to_survive.config.creeper.maxHealthMultiplier": "Max Health Explosion Multiplier",
+    "wanderlusts_way_to_survive.config.creeper.minHealthMultiplier": "Min Health Explosion Multiplier",
+    "wanderlusts_way_to_survive.configuration.horse": "Horse Settings",
+    "wanderlusts_way_to_survive.config.horse.enableHorseLeafPassthrough": "Enable Horse Leaf Passthrough",
+    "wanderlusts_way_to_survive.config.horse.horseLeafGracePeriod": "Leaf Passthrough Grace Period (ms)"
 }

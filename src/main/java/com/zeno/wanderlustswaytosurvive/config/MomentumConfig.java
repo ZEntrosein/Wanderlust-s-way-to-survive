@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * 旅者附魔配置类
+ * 旅者附魔配置类 (现在包含所有通用配置)
  * 使用NeoForge的配置系统定义可调整的参数
  */
 public class MomentumConfig {
@@ -20,17 +20,24 @@ public class MomentumConfig {
                 INSTANCE = pair.getLeft();
         }
 
-        // 基础速度上限
+        // ==================== 旅者附魔设置 ====================
         public final ModConfigSpec.DoubleValue baseSpeedCap;
-        // 经验等级速度倍率
         public final ModConfigSpec.DoubleValue xpSpeedMultiplier;
-        // 附魔等级速度倍率
         public final ModConfigSpec.DoubleValue enchantmentLevelMultiplier;
-        // 方块特定速度上限列表
         public final ModConfigSpec.ConfigValue<List<? extends String>> blockSpeedCaps;
 
+        // ==================== 苦力怕设置 ====================
+        public final ModConfigSpec.BooleanValue enableCreeperScaling;
+        public final ModConfigSpec.DoubleValue maxHealthMultiplier;
+        public final ModConfigSpec.DoubleValue minHealthMultiplier;
+
+        // ==================== 马匹设置 ====================
+        public final ModConfigSpec.BooleanValue enableHorseLeafPassthrough;
+        public final ModConfigSpec.IntValue horseLeafGracePeriod;
+
         MomentumConfig(ModConfigSpec.Builder builder) {
-                builder.push("Traveler Settings");
+                // Traveler Settings
+                builder.comment("Settings for the Traveler Enchantment").push("traveler");
 
                 baseSpeedCap = builder
                                 .comment("Base maximum speed bonus cap (flat value added to movement speed). Default: 0.2")
@@ -61,6 +68,46 @@ public class MomentumConfig {
                                                                 "minecraft:packed_ice,0.5"),
                                                 () -> "minecraft:block_id,0.2",
                                                 MomentumConfig::validateBlockSpeedEntry);
+
+                builder.pop();
+
+                // Creeper Settings
+                builder.comment("Settings for Creeper Explosion Scaling").push("creeper");
+
+                enableCreeperScaling = builder
+                                .comment("Enable dynamic explosion scaling based on Creeper health.")
+                                .comment("启用基于苦力怕生命值的动态爆炸缩放。")
+                                .translation("wanderlusts_way_to_survive.config.creeper.enableCreeperScaling")
+                                .define("enableCreeperScaling", true);
+
+                maxHealthMultiplier = builder
+                                .comment("Explosion multiplier when Creeper is at 100% health. Default: 0.5 (Weaker explosion)")
+                                .comment("苦力怕满血时的爆炸倍率。默认值：0.5（较弱爆炸）")
+                                .translation("wanderlusts_way_to_survive.config.creeper.maxHealthMultiplier")
+                                .defineInRange("maxHealthMultiplier", 0.5, 0.0, 10.0);
+
+                minHealthMultiplier = builder
+                                .comment("Explosion multiplier when Creeper is near 0% health. Default: 2.5 (Stronger explosion)")
+                                .comment("苦力怕接近死亡时的爆炸倍率。默认值：2.5（较强爆炸）")
+                                .translation("wanderlusts_way_to_survive.config.creeper.minHealthMultiplier")
+                                .defineInRange("minHealthMultiplier", 2.5, 0.0, 10.0);
+
+                builder.pop();
+
+                // Horse Settings
+                builder.comment("Settings for Horse-related features").push("horse");
+
+                enableHorseLeafPassthrough = builder
+                                .comment("Allow horses to pass through leaves when standing on non-leaf blocks.")
+                                .comment("允许马在踩着非树叶方块时穿过树叶。")
+                                .translation("wanderlusts_way_to_survive.config.horse.enableHorseLeafPassthrough")
+                                .define("enableHorseLeafPassthrough", true);
+
+                horseLeafGracePeriod = builder
+                                .comment("Grace period (in milliseconds) after leaving non-leaf ground during which leaves remain passable. Default: 500")
+                                .comment("离开非树叶地面后的宽限期（毫秒），在此期间树叶仍可穿过。默认值：500")
+                                .translation("wanderlusts_way_to_survive.config.horse.horseLeafGracePeriod")
+                                .defineInRange("horseLeafGracePeriod", 500, 0, 5000);
 
                 builder.pop();
         }

@@ -13,7 +13,7 @@ import net.minecraft.world.item.enchantment.Enchantment;
  */
 public class ModEnchantments {
     // 旅者附魔的ResourceKey - 用于在代码中引用附魔
-    public static final ResourceKey<Enchantment> MOMENTUM = ResourceKey.create(
+    public static final ResourceKey<Enchantment> TREK = ResourceKey.create(
             Registries.ENCHANTMENT,
-            ResourceLocation.fromNamespaceAndPath(WanderlustsWayToSurvive.MOD_ID, "momentum"));
+            ResourceLocation.fromNamespaceAndPath(WanderlustsWayToSurvive.MOD_ID, "trek"));
 }

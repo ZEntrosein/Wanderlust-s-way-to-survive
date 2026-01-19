@@ -5,12 +5,8 @@ import com.zeno.wanderlustswaytosurvive.config.MomentumConfig;
 import com.zeno.wanderlustswaytosurvive.registries.ModEnchantments;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Holder;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
@@ -36,18 +32,21 @@ public class EdgeProtectionHandler {
 
         // 1. 检查附魔
         // 注意：客户端的EnchantmentHelper应该可以工作（如果标签已同步）
-        var momentumHolderInfo = player.registryAccess()
-                .registryOrThrow(Registries.ENCHANTMENT)
-                .getHolder(ModEnchantments.MOMENTUM);
-
-        if (momentumHolderInfo.isEmpty())
+        var boots = player.getItemBySlot(EquipmentSlot.FEET);
+        if (boots.isEmpty())
             return;
 
-        int enchantmentLevel = EnchantmentHelper.getItemEnchantmentLevel(
-                momentumHolderInfo.get(),
-                player.getItemBySlot(EquipmentSlot.FEET));
+        var enchantments = boots.getEnchantments();
+        boolean hasEnchantment = false;
 
-        if (enchantmentLevel <= 0)
+        for (var entry : enchantments.entrySet()) {
+            if (entry.getKey().is(ModEnchantments.TREK)) {
+                hasEnchantment = true;
+                break;
+            }
+        }
+
+        if (!hasEnchantment)
             return;
 
         // 2. 检查条件：在地面、没有跳跃、正在疾跑

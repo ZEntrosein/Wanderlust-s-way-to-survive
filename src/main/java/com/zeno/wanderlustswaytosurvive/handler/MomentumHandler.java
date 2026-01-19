@@ -4,10 +4,7 @@ import com.zeno.wanderlustswaytosurvive.attachment.MomentumData;
 import com.zeno.wanderlustswaytosurvive.config.MomentumConfig;
 import com.zeno.wanderlustswaytosurvive.registries.ModAttachmentTypes;
 import com.zeno.wanderlustswaytosurvive.registries.ModEnchantments;
-import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -16,7 +13,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -56,7 +52,12 @@ public class MomentumHandler {
 
         // 1. 检查附魔（使用ItemEnchantments组件，支持数据包驱动的附魔）
         var boots = player.getItemBySlot(EquipmentSlot.FEET);
-        int enchantmentLevel = getEnchantmentLevelByKey(boots, ModEnchantments.MOMENTUM);
+        if (boots.isEmpty()) {
+            return;
+        }
+
+        // 直接检查靴子上是否有旅者（Trek）附魔
+        int enchantmentLevel = getEnchantmentLevelByKey(boots, ModEnchantments.TREK);
 
         if (enchantmentLevel <= 0) {
             if (data.getCurrentSpeedBonus() > 0) {
