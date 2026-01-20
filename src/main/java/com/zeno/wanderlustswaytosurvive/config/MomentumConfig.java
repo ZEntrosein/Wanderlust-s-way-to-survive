@@ -56,6 +56,17 @@ public class MomentumConfig {
         public final ModConfigSpec.DoubleValue goatHornSummonParticleRadius;
         public final ModConfigSpec.IntValue goatHornSummonParticleDelay;
         public final ModConfigSpec.DoubleValue goatHornSummonMaxDistance;
+
+        // ==================== 船只旗帜设置 ====================
+        public final ModConfigSpec.BooleanValue enableBoatBanner;
+        public final ModConfigSpec.DoubleValue boatBannerSpeedMultiplier;
+        public final ModConfigSpec.DoubleValue boatBannerScale;
+        public final ModConfigSpec.DoubleValue boatBannerTranslationX;
+        public final ModConfigSpec.DoubleValue boatBannerTranslationY;
+        public final ModConfigSpec.DoubleValue boatBannerTranslationZ;
+        public final ModConfigSpec.DoubleValue boatBannerRotationX;
+        public final ModConfigSpec.DoubleValue boatBannerRotationY;
+        public final ModConfigSpec.DoubleValue boatBannerRotationZ;
         public final ModConfigSpec.DoubleValue goatHornSummonTeleportDistance;
 
         // ==================== 末影珍珠传送设置 ====================
@@ -218,7 +229,7 @@ public class MomentumConfig {
                                 .comment("Delay in ticks before spawning summon particles. 20 ticks = 1 second.")
                                 .comment("召唤粒子特效的延迟时间（Tick）。20 Tick = 1 秒。")
                                 .translation("wanderlusts_way_to_survive.config.horse.goatHornSummonParticleDelay")
-                                .defineInRange("goatHornSummonParticleDelay", 0, 0, 100);
+                                .defineInRange("goatHornSummonParticleDelay", 5, 0, 100);
 
                 goatHornSummonMaxDistance = builder
                                 .comment("Maximum distance (in blocks) to summon a mount via Goat Horn. Only works for loaded chunks.")
@@ -231,6 +242,69 @@ public class MomentumConfig {
                                 .comment("召唤时坐骑传送到玩家前方的距离（格）。0 = 玩家当前位置。")
                                 .translation("wanderlusts_way_to_survive.config.horse.goatHornSummonTeleportDistance")
                                 .defineInRange("goatHornSummonTeleportDistance", 2.5, 0.0, 16.0);
+
+                builder.pop();
+
+                // Boat Banner Settings
+                builder.push("boat_banner");
+
+                enableBoatBanner = builder
+                                .comment("Allow placing banners on boats for decoration and speed boost.")
+                                .comment("允许将旗帜放置在船上以进行装饰并获得速度提升。")
+                                .translation("wanderlusts_way_to_survive.config.boat.enableBoatBanner")
+                                .define("enableBoatBanner", true);
+
+                boatBannerSpeedMultiplier = builder
+                                .comment("Speed multiplier when a boat has a banner equipped. 1.0 = No boost.")
+                                .comment("船只装备旗帜时的速度倍率。1.0 = 无加速。")
+                                .translation("wanderlusts_way_to_survive.config.boat.boatBannerSpeedMultiplier")
+                                .defineInRange("boatBannerSpeedMultiplier", 1.2, 1.0, 5.0);
+
+                builder.push("rendering");
+
+                boatBannerScale = builder
+                                .comment("Scale of the banner on the boat.")
+                                .comment("船上旗帜的缩放大小。")
+                                .translation("wanderlusts_way_to_survive.config.boat.boatBannerScale")
+                                .defineInRange("boatBannerScale", 0.75, 0.1, 5.0);
+
+                boatBannerTranslationX = builder
+                                .comment("X offset of the banner.")
+                                .comment("旗帜的 X 轴偏移量。")
+                                .translation("wanderlusts_way_to_survive.config.boat.boatBannerTranslationX")
+                                .defineInRange("boatBannerTranslationX", 0.0, -10.0, 10.0);
+
+                boatBannerTranslationY = builder
+                                .comment("Y offset of the banner.")
+                                .comment("旗帜的 Y 轴偏移量。")
+                                .translation("wanderlusts_way_to_survive.config.boat.boatBannerTranslationY")
+                                .defineInRange("boatBannerTranslationY", 0.4, -10.0, 10.0);
+
+                boatBannerTranslationZ = builder
+                                .comment("Z offset of the banner.")
+                                .comment("旗帜的 Z 轴偏移量。")
+                                .translation("wanderlusts_way_to_survive.config.boat.boatBannerTranslationZ")
+                                .defineInRange("boatBannerTranslationZ", 0.8, -10.0, 10.0);
+
+                boatBannerRotationX = builder
+                                .comment("Rotation angles (degrees) around X axis.")
+                                .comment("绕 X 轴旋转角度（度）。")
+                                .translation("wanderlusts_way_to_survive.config.boat.boatBannerRotationX")
+                                .defineInRange("boatBannerRotationX", -10.0, -180.0, 180.0);
+
+                boatBannerRotationY = builder
+                                .comment("Rotation angles (degrees) around Y axis.")
+                                .comment("绕 Y 轴旋转角度（度）。")
+                                .translation("wanderlusts_way_to_survive.config.boat.boatBannerRotationY")
+                                .defineInRange("boatBannerRotationY", 180.0, -180.0, 180.0);
+
+                boatBannerRotationZ = builder
+                                .comment("Rotation angles (degrees) around Z axis.")
+                                .comment("绕 Z 轴旋转角度（度）。")
+                                .translation("wanderlusts_way_to_survive.config.boat.boatBannerRotationZ")
+                                .defineInRange("boatBannerRotationZ", 0.0, -180.0, 180.0);
+
+                builder.pop();
 
                 builder.pop();
 
