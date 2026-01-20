@@ -47,5 +47,7 @@
     "tooltip.wanderlusts_way_to_survive.horn.bound_to": "Bound to: %s",
     "wanderlusts_way_to_survive.configuration.mountedPearl": "Mounted Teleport Settings",
     "wanderlusts_way_to_survive.config.mountedPearl.enableMountedPearlTeleport": "Enable Mounted Pearl Teleport",
-    "wanderlusts_way_to_survive.config.mountedPearl.mountedPearlSyncTicks": "Teleport Synchronization Ticks"
+    "wanderlusts_way_to_survive.config.mountedPearl.mountedPearlSyncTicks": "Teleport Synchronization Ticks",
+    "wanderlusts_way_to_survive.configuration.boat_banner": "Boat Banner Settings",
+    "wanderlusts_way_to_survive.configuration.boat_banner.rendering": "Boat Banner Rendering Settings"
 }

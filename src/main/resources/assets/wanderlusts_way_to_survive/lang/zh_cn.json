@@ -47,5 +47,7 @@
     "tooltip.wanderlusts_way_to_survive.horn.bound_to": "已绑定: %s",
     "wanderlusts_way_to_survive.configuration.mountedPearl": "骑乘传送设置",
     "wanderlusts_way_to_survive.config.mountedPearl.enableMountedPearlTeleport": "启用骑乘末影珍珠传送",
-    "wanderlusts_way_to_survive.config.mountedPearl.mountedPearlSyncTicks": "传送同步 Tick 数"
+    "wanderlusts_way_to_survive.config.mountedPearl.mountedPearlSyncTicks": "传送同步 Tick 数",
+    "wanderlusts_way_to_survive.configuration.boat_banner": "船只旗帜设置",
+    "wanderlusts_way_to_survive.configuration.boat_banner.rendering": "船只旗帜渲染设置"
 }

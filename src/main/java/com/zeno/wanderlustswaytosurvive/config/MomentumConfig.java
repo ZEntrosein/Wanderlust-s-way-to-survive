@@ -246,7 +246,9 @@ public class MomentumConfig {
                 builder.pop();
 
                 // Boat Banner Settings
-                builder.push("boat_banner");
+                builder.comment("Settings for Boat Banner feature")
+                                .translation("wanderlusts_way_to_survive.configuration.boat_banner")
+                                .push("boat_banner");
 
                 enableBoatBanner = builder
                                 .comment("Allow placing banners on boats for decoration and speed boost.")
@@ -260,7 +262,9 @@ public class MomentumConfig {
                                 .translation("wanderlusts_way_to_survive.config.boat.boatBannerSpeedMultiplier")
                                 .defineInRange("boatBannerSpeedMultiplier", 1.2, 1.0, 5.0);
 
-                builder.push("rendering");
+                builder.comment("Rendering settings for boat banner")
+                                .translation("wanderlusts_way_to_survive.configuration.boat_banner.rendering")
+                                .push("rendering");
 
                 boatBannerScale = builder
                                 .comment("Scale of the banner on the boat.")

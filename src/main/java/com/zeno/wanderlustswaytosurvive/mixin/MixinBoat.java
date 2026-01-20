@@ -117,24 +117,44 @@ public abstract class MixinBoat extends Entity implements IBannerBoat {
     // }
     // }
 
-    // 提升水面摩擦力 (保持速度)
+    @org.spongepowered.asm.mixin.Shadow
+    public abstract Boat.Status getStatus();
+
+    // 注入 tick 方法来在水下提供速度加成 (解决硬编码摩擦力问题)
+    @Inject(method = "tick", at = @At("TAIL"))
+    private void tick(CallbackInfo ci) {
+        if (!MomentumConfig.INSTANCE.enableBoatBanner.get())
+            return;
+
+        ItemStack banner = this.entityData.get(BANNER_ITEM);
+        if (banner.isEmpty())
+            return;
+
+        Boat.Status status = this.getStatus();
+
+        // 仅在水中生效 (硬编码 0.9F 的地方)
+        if (status == Boat.Status.IN_WATER || status == Boat.Status.UNDER_FLOWING_WATER) {
+            double multiplier = MomentumConfig.INSTANCE.boatBannerSpeedMultiplier.get();
+            if (multiplier > 1.0) {
+                // 原本逻辑: newVel = oldVel * 0.9.
+                double boost = (1.0 - (0.1 / multiplier)) / 0.9;
+
+                net.minecraft.world.phys.Vec3 delta = this.getDeltaMovement();
+                this.setDeltaMovement(delta.multiply(boost, 1.0, boost));
+            }
+        }
+    }
+
+    // 提升地面/冰面摩擦力 (保持速度) - 保留作为陆地/滑冰优化
     @Inject(method = "getGroundFriction", at = @At("RETURN"), cancellable = true)
     private void getGroundFriction(CallbackInfoReturnable<Float> cir) {
         if (MomentumConfig.INSTANCE.enableBoatBanner.get() && !this.entityData.get(BANNER_ITEM).isEmpty()) {
-            // 原始值通常是 0.9 (Status.IN_WATER)
+            // 不再调用 getStatus() 以避免 StackOverflowError (getStatus 内部会调用 getGroundFriction)
+            // 假设 getGroundFriction 主要影响陆地/滑冰逻辑。
             float original = cir.getReturnValue();
-
-            // 增加摩擦力系数，使其更接近 1.0，从而减少减速效果
-            // 使用配置倍率来计算提升量?
             double multiplier = MomentumConfig.INSTANCE.boatBannerSpeedMultiplier.get();
-            // 假设 mult = 1.2. 我们希望速度保持能力提升。
-            // 简单的数学公式：newFriction = original + (1 - original) * (multiplier - 1) * 0.5?
-            // 或者直接加一点点?
-
-            // 如果 multiplier = 1.0, 保持不变
-            // 如果 multiplier = 1.2, 提升一点
             if (multiplier > 1.0) {
-                float boost = (float) ((multiplier - 1.0) * 0.05f); // 微调系数，避免太快
+                float boost = (float) ((multiplier - 1.0) * 0.05f);
                 float newFriction = Math.min(0.99f, original + boost);
                 cir.setReturnValue(newFriction);
             }
