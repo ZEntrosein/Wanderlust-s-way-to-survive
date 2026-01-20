@@ -20,6 +20,11 @@
     "wanderlusts_way_to_survive.config.horse.horseSwimHorizontalMultiplier": "Swimming Horizontal Speed Multiplier",
     "wanderlusts_way_to_survive.config.horse.horseSwimDeepWaterCheck": "Enable Deep Water Check",
     "wanderlusts_way_to_survive.config.horse.horseSwimMode": "Swimming Mode (Motion Mode/Fixed Height Mode)",
+    "wanderlusts_way_to_survive.config.horse.enableHorseTransparency": "Enable Transparency (Look Down)",
+    "wanderlusts_way_to_survive.config.horse.horseTransparencyFadeStart": "Transparency Start Angle (Deg)",
+    "wanderlusts_way_to_survive.config.horse.horseTransparencyFadeEnd": "Transparency Max Angle (Deg)",
+    "wanderlusts_way_to_survive.config.horse.horseMinOpacity": "Minimum Opacity (At Max Angle)",
+    "wanderlusts_way_to_survive.configuration.mountedPearl": "Mounted Teleport Settings",
     "wanderlusts_way_to_survive.config.mountedPearl.enableMountedPearlTeleport": "Enable Mounted Pearl Teleport",
     "wanderlusts_way_to_survive.config.mountedPearl.mountedPearlSyncTicks": "Teleport Synchronization Ticks"
 }

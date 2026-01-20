@@ -93,6 +93,16 @@
 | `horseSwimHorizontalMultiplier` | 游泳水平速度倍率 | 1.0 | 0.0 - 5.0 |
 | `horseSwimDeepWaterCheck` | 启用深水检测（防止浅水乱跳） | true | - |
 
+#### 骑马视角优化
+当骑在马背上视角向下移时，马匹会逐渐变透明，提供更好的视野。
+
+| 配置项 | 描述 | 默认值 | 范围 |
+|--------|------|--------|------|
+| `enableHorseTransparency` | 启用马匹透明化 | true | - |
+| `horseTransparencyFadeStart` | 透明化开始角度（开始变淡） | 25.0 | 0.0 - 90.0 |
+| `horseTransparencyFadeEnd` | 透明化最大角度（达到最淡） | 45.0 | > Start - 90.0 |
+| `horseMinOpacity` | 最小不透明度（最淡状态） | 0.25 | 0.0 - 1.0 |
+
 ---
 
 ### 5. 骑乘末影珍珠传送 (Mounted Pearl Teleport)

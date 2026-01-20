@@ -45,6 +45,11 @@ public class MomentumConfig {
         public final ModConfigSpec.BooleanValue horseSwimDeepWaterCheck;
         public final ModConfigSpec.EnumValue<HorseSwimMode> horseSwimMode;
 
+        public final ModConfigSpec.BooleanValue enableHorseTransparency;
+        public final ModConfigSpec.DoubleValue horseTransparencyFadeStart;
+        public final ModConfigSpec.DoubleValue horseTransparencyFadeEnd;
+        public final ModConfigSpec.DoubleValue horseMinOpacity;
+
         // ==================== 末影珍珠传送设置 ====================
         public final ModConfigSpec.BooleanValue enableMountedPearlTeleport;
         public final ModConfigSpec.IntValue mountedPearlSyncTicks;
@@ -153,10 +158,36 @@ public class MomentumConfig {
                                 .translation("wanderlusts_way_to_survive.config.horse.horseSwimMode")
                                 .defineEnum("horseSwimMode", HorseSwimMode.PHYSICAL);
 
+                enableHorseTransparency = builder
+                                .comment("Enable making the horse transparent when looking down while riding.")
+                                .comment("启用骑乘时低头视角马匹透明化。")
+                                .translation("wanderlusts_way_to_survive.config.horse.enableHorseTransparency")
+                                .define("enableHorseTransparency", true);
+
+                horseTransparencyFadeStart = builder
+                                .comment("Pitch angle (degrees) to start fading the horse. (0 = horizontal, 90 = straight down)")
+                                .comment("开始透明化的俯视角度。（0 = 水平，90 = 垂直向下）")
+                                .translation("wanderlusts_way_to_survive.config.horse.horseTransparencyFadeStart")
+                                .defineInRange("horseTransparencyFadeStart", 1.0, 0.0, 90.0);
+
+                horseTransparencyFadeEnd = builder
+                                .comment("Pitch angle (degrees) to reach minimum opacity. Must be greater than start angle.")
+                                .comment("达到最小不透明度的俯视角度。必须大于开始角度。")
+                                .translation("wanderlusts_way_to_survive.config.horse.horseTransparencyFadeEnd")
+                                .defineInRange("horseTransparencyFadeEnd", 50.0, 0.0, 90.0);
+
+                horseMinOpacity = builder
+                                .comment("Minimum opacity of the horse when looking straight down. (0.0 = invisible, 1.0 = opaque)")
+                                .comment("完全低头时的最小不透明度。（0.0 = 不可见，1.0 = 不透明）")
+                                .translation("wanderlusts_way_to_survive.config.horse.horseMinOpacity")
+                                .defineInRange("horseMinOpacity", 0.05, 0.0, 1.0);
+
                 builder.pop();
 
                 // Mounted Pearl Settings
-                builder.comment("Settings for Mounted Ender Pearl Teleportation").push("mountedPearl");
+                builder.comment("Settings for Mounted Ender Pearl Teleportation")
+                                .translation("wanderlusts_way_to_survive.configuration.mountedPearl")
+                                .push("mountedPearl");
 
                 enableMountedPearlTeleport = builder
                                 .comment("Allow mounts to teleport with the player when using Ender Pearls.")
