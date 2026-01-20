@@ -14,5 +14,12 @@
     "wanderlusts_way_to_survive.config.creeper.minHealthMultiplier": "Min Health Explosion Multiplier",
     "wanderlusts_way_to_survive.configuration.horse": "Horse Settings",
     "wanderlusts_way_to_survive.config.horse.enableHorseLeafPassthrough": "Enable Horse Leaf Passthrough",
-    "wanderlusts_way_to_survive.config.horse.horseLeafGracePeriod": "Leaf Passthrough Grace Period (ms)"
+    "wanderlusts_way_to_survive.config.horse.horseLeafGracePeriod": "Leaf Passthrough Grace Period (ms)",
+    "wanderlusts_way_to_survive.config.horse.enableHorseSwim": "Enable Horse Swimming",
+    "wanderlusts_way_to_survive.config.horse.horseSwimUpwardDrift": "Swimming Upward Drift (Y-axis)",
+    "wanderlusts_way_to_survive.config.horse.horseSwimHorizontalMultiplier": "Swimming Horizontal Speed Multiplier",
+    "wanderlusts_way_to_survive.config.horse.horseSwimDeepWaterCheck": "Enable Deep Water Check",
+    "wanderlusts_way_to_survive.config.horse.horseSwimMode": "Swimming Mode (Motion Mode/Fixed Height Mode)",
+    "wanderlusts_way_to_survive.config.mountedPearl.enableMountedPearlTeleport": "Enable Mounted Pearl Teleport",
+    "wanderlusts_way_to_survive.config.mountedPearl.mountedPearlSyncTicks": "Teleport Synchronization Ticks"
 }

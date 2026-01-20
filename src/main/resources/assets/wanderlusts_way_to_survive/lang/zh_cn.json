@@ -14,5 +14,12 @@
     "wanderlusts_way_to_survive.config.creeper.minHealthMultiplier": "残血爆炸倍率",
     "wanderlusts_way_to_survive.configuration.horse": "马匹设置",
     "wanderlusts_way_to_survive.config.horse.enableHorseLeafPassthrough": "启用骑马穿叶",
-    "wanderlusts_way_to_survive.config.horse.horseLeafGracePeriod": "穿叶宽限期(毫秒)"
+    "wanderlusts_way_to_survive.config.horse.horseLeafGracePeriod": "穿叶宽限期(毫秒)",
+    "wanderlusts_way_to_survive.config.horse.enableHorseSwim": "启用马匹游泳",
+    "wanderlusts_way_to_survive.config.horse.horseSwimUpwardDrift": "游泳上浮速度 (Y轴)",
+    "wanderlusts_way_to_survive.config.horse.horseSwimHorizontalMultiplier": "游泳水平速度倍率",
+    "wanderlusts_way_to_survive.config.horse.horseSwimDeepWaterCheck": "启用深水检测",
+    "wanderlusts_way_to_survive.config.horse.horseSwimMode": "游泳模式 (运动模式/定高模式)",
+    "wanderlusts_way_to_survive.config.mountedPearl.enableMountedPearlTeleport": "启用骑乘末影珍珠传送",
+    "wanderlusts_way_to_survive.config.mountedPearl.mountedPearlSyncTicks": "传送同步 Tick 数"
 }

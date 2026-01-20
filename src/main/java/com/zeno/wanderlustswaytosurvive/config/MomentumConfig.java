@@ -11,6 +11,11 @@ import java.util.List;
  * 使用NeoForge的配置系统定义可调整的参数
  */
 public class MomentumConfig {
+        public static enum HorseSwimMode {
+                PHYSICAL,
+                TELEPORT
+        }
+
         public static final ModConfigSpec SPEC;
         public static final MomentumConfig INSTANCE;
 
@@ -34,6 +39,11 @@ public class MomentumConfig {
         // ==================== 马匹设置 ====================
         public final ModConfigSpec.BooleanValue enableHorseLeafPassthrough;
         public final ModConfigSpec.IntValue horseLeafGracePeriod;
+        public final ModConfigSpec.BooleanValue enableHorseSwim;
+        public final ModConfigSpec.DoubleValue horseSwimUpwardDrift;
+        public final ModConfigSpec.DoubleValue horseSwimHorizontalMultiplier;
+        public final ModConfigSpec.BooleanValue horseSwimDeepWaterCheck;
+        public final ModConfigSpec.EnumValue<HorseSwimMode> horseSwimMode;
 
         // ==================== 末影珍珠传送设置 ====================
         public final ModConfigSpec.BooleanValue enableMountedPearlTeleport;
@@ -112,6 +122,36 @@ public class MomentumConfig {
                                 .comment("离开非树叶地面后的宽限期（毫秒），在此期间树叶仍可穿过。默认值：500")
                                 .translation("wanderlusts_way_to_survive.config.horse.horseLeafGracePeriod")
                                 .defineInRange("horseLeafGracePeriod", 500, 0, 5000);
+
+                enableHorseSwim = builder
+                                .comment("Allow mounted horses to swim in deep water instead of sinking.")
+                                .comment("允许骑乘的马在深水中游泳，而不是下沉。")
+                                .translation("wanderlusts_way_to_survive.config.horse.enableHorseSwim")
+                                .define("enableHorseSwim", true);
+
+                horseSwimUpwardDrift = builder
+                                .comment("Upward drift speed when swimming (Y-axis movement per tick).")
+                                .comment("游泳时的上浮速度（每 tick Y 轴移动量）。")
+                                .translation("wanderlusts_way_to_survive.config.horse.horseSwimUpwardDrift")
+                                .defineInRange("horseSwimUpwardDrift", 0.1, 0.0, 1.0);
+
+                horseSwimHorizontalMultiplier = builder
+                                .comment("Horizontal speed multiplier when swimming.")
+                                .comment("游泳时的水平移动速度倍率。")
+                                .translation("wanderlusts_way_to_survive.config.horse.horseSwimHorizontalMultiplier")
+                                .defineInRange("horseSwimHorizontalMultiplier", 1.0, 0.0, 5.0);
+
+                horseSwimDeepWaterCheck = builder
+                                .comment("Only enable swimming in deep water (checks block below).")
+                                .comment("仅在深水（检查脚下方块）时启用游泳。")
+                                .translation("wanderlusts_way_to_survive.config.horse.horseSwimDeepWaterCheck")
+                                .define("horseSwimDeepWaterCheck", true);
+
+                horseSwimMode = builder
+                                .comment("Swimming mode: PHYSICAL (Motion Mode - smooth physics) or TELEPORT (Fixed Height Mode - maintains position).")
+                                .comment("游泳模式：PHYSICAL（运动模式 - 平滑物理）或 TELEPORT（定高模式 - 保持高度）。")
+                                .translation("wanderlusts_way_to_survive.config.horse.horseSwimMode")
+                                .defineEnum("horseSwimMode", HorseSwimMode.PHYSICAL);
 
                 builder.pop();
 

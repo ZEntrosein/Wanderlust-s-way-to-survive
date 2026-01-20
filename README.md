@@ -74,9 +74,28 @@
 | `enableHorseLeafPassthrough` | 启用骑马穿叶 | true |
 | `horseLeafGracePeriod` | 穿叶宽限期（毫秒） | 500 |
 
+### 4. 马匹游泳 (Horse Swimming)
+
+#### 功能描述
+允许骑乘的马匹在**深水区**游泳，防止因进入深水而沉底或迫使玩家下马。
+
+#### 工作原理
+- 检测马匹是否被骑乘且处于水中
+- 如果脚下也是水（深水），给予马匹向上的浮力
+- 保持马匹头部在水面之上
+
+#### 配置项
+| 配置项 | 描述 | 默认值 | 范围 |
+|--------|------|--------|------|
+| `enableHorseSwim` | 启用马匹游泳 | true | - |
+| `horseSwimMode` | 游泳模式 (运动模式/定高模式) | PHYSICAL | - |
+| `horseSwimUpwardDrift` | 游泳上浮速度 (Y轴) | 0.1 | 0.0 - 1.0 |
+| `horseSwimHorizontalMultiplier` | 游泳水平速度倍率 | 1.0 | 0.0 - 5.0 |
+| `horseSwimDeepWaterCheck` | 启用深水检测（防止浅水乱跳） | true | - |
+
 ---
 
-### 4. 骑乘末影珍珠传送 (Mounted Pearl Teleport)
+### 5. 骑乘末影珍珠传送 (Mounted Pearl Teleport)
 
 #### 功能描述
 骑乘坐骑（马、骆驼等）时使用末影珍珠，**坐骑会跟随玩家一起传送**到目的地，传送后仍保持骑乘状态。
@@ -117,7 +136,8 @@ src/main/java/com/zeno/wanderlustswaytosurvive/
 ├── handler/
 │   ├── MomentumHandler.java        # 旅者附魔逻辑（服务端）
 │   ├── EdgeProtectionHandler.java  # 边缘保护（客户端）
-│   └── MountedPearlHandler.java    # 骑乘传送逻辑
+│   ├── MountedPearlHandler.java    # 骑乘传送逻辑
+│   └── HorseSwimHandler.java       # 马匹游泳逻辑
 ├── mixin/
 │   ├── CreeperMixin.java           # 苦力怕爆炸 Mixin
 │   └── LeavesBlockMixin.java       # 骑马穿叶 Mixin
