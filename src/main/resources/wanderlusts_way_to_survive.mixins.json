@@ -6,7 +6,8 @@
     "CreeperMixin",
     "LeavesBlockMixin",
     "MixinLivingEntityRenderer",
-    "MixinHorseArmorLayer"
+    "MixinHorseArmorLayer",
+    "MixinItem"
   ],
   "injectors": {
     "defaultRequire": 1

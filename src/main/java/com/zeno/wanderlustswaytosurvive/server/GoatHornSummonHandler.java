@@ -2,6 +2,7 @@ package com.zeno.wanderlustswaytosurvive.server;
 
 import com.zeno.wanderlustswaytosurvive.config.MomentumConfig;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -18,6 +19,11 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 
+import net.neoforged.neoforge.event.tick.ServerTickEvent;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.UUID;
 
 import com.zeno.wanderlustswaytosurvive.WanderlustsWayToSurvive;
@@ -25,8 +31,8 @@ import com.zeno.wanderlustswaytosurvive.WanderlustsWayToSurvive;
 @EventBusSubscriber(modid = WanderlustsWayToSurvive.MOD_ID)
 public class GoatHornSummonHandler {
 
-    private static final String TAG_MOUNT_UUID = "WanderlustMountUUID";
-    private static final String TAG_MOUNT_NAME = "WanderlustMountName";
+    public static final String TAG_MOUNT_UUID = "WanderlustMountUUID";
+    public static final String TAG_MOUNT_NAME = "WanderlustMountName";
 
     // 1. 绑定坐骑：手持山羊角右键实体
     @SubscribeEvent
@@ -123,9 +129,37 @@ public class GoatHornSummonHandler {
                     player.displayClientMessage(
                             Component.translatable("message.wanderlusts_way_to_survive.horn.not_found"), true);
                 } else {
-                    // 传送
-                    // 寻找安全落脚点？简单处理：传送到玩家位置
-                    mount.teleportTo(player.getX(), player.getY(), player.getZ());
+                    double teleportDistance = MomentumConfig.INSTANCE.goatHornSummonTeleportDistance.get();
+
+                    if (teleportDistance > 0) {
+                        // 计算玩家视线方向
+                        net.minecraft.world.phys.Vec3 lookVec = player.getLookAngle();
+                        // 忽略Y轴分量，只在水平面上偏移? 或者跟随视线?
+                        // 通常坐骑应该在地面，所以我们只去 X 和 Z 的偏移
+                        double targetX = player.getX() + lookVec.x * teleportDistance;
+                        double targetZ = player.getZ() + lookVec.z * teleportDistance;
+                        // Y轴保持与玩家相同，或者稍微向上一点防止卡住? 直接用玩家Y即可
+                        double targetY = player.getY();
+
+                        mount.teleportTo(targetX, targetY, targetZ);
+                    } else {
+                        // 距离为0，直接传送至玩家位置
+                        mount.teleportTo(player.getX(), player.getY(), player.getZ());
+                    }
+
+                    // 粒子特效
+                    if (MomentumConfig.INSTANCE.enableGoatHornSummonParticles.get()) {
+                        int delay = MomentumConfig.INSTANCE.goatHornSummonParticleDelay.get();
+
+                        if (delay > 0) {
+                            // 延迟生成任务
+                            delayedTasks.add(new DelayedParticleTask(level, mount.getUUID(),
+                                    level.getGameTime() + delay, mount.getX(), mount.getY(), mount.getZ()));
+                        } else {
+                            // 立即生成
+                            spawnParticles(level, mount.getX(), mount.getY(), mount.getZ());
+                        }
+                    }
 
                     player.displayClientMessage(
                             Component.translatable("message.wanderlusts_way_to_survive.horn.summoned", name), true);
@@ -140,5 +174,43 @@ public class GoatHornSummonHandler {
         }
 
         // 我们不取消事件，让原版号角继续吹响
+    }
+
+    private static void spawnParticles(ServerLevel level, double x, double y, double z) {
+        double radius = MomentumConfig.INSTANCE.goatHornSummonParticleRadius.get();
+        int particleCount = 20;
+        for (int i = 0; i < particleCount; i++) {
+            double angle = 2 * Math.PI * i / particleCount;
+            double pX = x + radius * Math.cos(angle);
+            double pZ = z + radius * Math.sin(angle);
+            level.sendParticles(ParticleTypes.CLOUD, pX, y + 0.1, pZ, 1, 0, 0, 0, 0.05);
+        }
+    }
+
+    // ========== 延迟粒子任务管理 ==========
+
+    private static final List<DelayedParticleTask> delayedTasks = new ArrayList<>();
+
+    private record DelayedParticleTask(ServerLevel level, UUID entityUUID, long targetTime, double x, double y,
+            double z) {
+    }
+
+    @SubscribeEvent
+    public static void onServerTick(ServerTickEvent.Post event) {
+        if (delayedTasks.isEmpty())
+            return;
+
+        // 使用第一个任务的 level 获取时间? 不，每个任务可能有不同的 level (多维度)
+        // 简单遍历任务列表
+        Iterator<DelayedParticleTask> iterator = delayedTasks.iterator();
+        while (iterator.hasNext()) {
+            DelayedParticleTask task = iterator.next();
+
+            // 检查该世界的时间
+            if (task.level.getGameTime() >= task.targetTime) {
+                spawnParticles(task.level, task.x, task.y, task.z);
+                iterator.remove();
+            }
+        }
     }
 }

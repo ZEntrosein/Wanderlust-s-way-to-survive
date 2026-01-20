@@ -51,7 +51,12 @@ public class MomentumConfig {
         public final ModConfigSpec.DoubleValue horseMinOpacity;
 
         public final ModConfigSpec.BooleanValue enableGoatHornSummon;
+        public final ModConfigSpec.BooleanValue enableGoatHornGlint;
+        public final ModConfigSpec.BooleanValue enableGoatHornSummonParticles;
+        public final ModConfigSpec.DoubleValue goatHornSummonParticleRadius;
+        public final ModConfigSpec.IntValue goatHornSummonParticleDelay;
         public final ModConfigSpec.DoubleValue goatHornSummonMaxDistance;
+        public final ModConfigSpec.DoubleValue goatHornSummonTeleportDistance;
 
         // ==================== 末影珍珠传送设置 ====================
         public final ModConfigSpec.BooleanValue enableMountedPearlTeleport;
@@ -191,11 +196,41 @@ public class MomentumConfig {
                                 .translation("wanderlusts_way_to_survive.config.horse.enableGoatHornSummon")
                                 .define("enableGoatHornSummon", true);
 
+                enableGoatHornGlint = builder
+                                .comment("Enable enchantment glint for bound Goat Horns.")
+                                .comment("启用已绑定山羊角的附魔光效。")
+                                .translation("wanderlusts_way_to_survive.config.horse.enableGoatHornGlint")
+                                .define("enableGoatHornGlint", true);
+
+                enableGoatHornSummonParticles = builder
+                                .comment("Enable particle effects (white smoke) when a mount is summoned.")
+                                .comment("启用坐骑召唤时的粒子特效（白烟）。")
+                                .translation("wanderlusts_way_to_survive.config.horse.enableGoatHornSummonParticles")
+                                .define("enableGoatHornSummonParticles", true);
+
+                goatHornSummonParticleRadius = builder
+                                .comment("Radius of the particle circle when summoning a mount.")
+                                .comment("召唤坐骑时粒子圆环的半径（格）。")
+                                .translation("wanderlusts_way_to_survive.config.horse.goatHornSummonParticleRadius")
+                                .defineInRange("goatHornSummonParticleRadius", 1.0, 0.1, 5.0);
+
+                goatHornSummonParticleDelay = builder
+                                .comment("Delay in ticks before spawning summon particles. 20 ticks = 1 second.")
+                                .comment("召唤粒子特效的延迟时间（Tick）。20 Tick = 1 秒。")
+                                .translation("wanderlusts_way_to_survive.config.horse.goatHornSummonParticleDelay")
+                                .defineInRange("goatHornSummonParticleDelay", 0, 0, 100);
+
                 goatHornSummonMaxDistance = builder
                                 .comment("Maximum distance (in blocks) to summon a mount via Goat Horn. Only works for loaded chunks.")
                                 .comment("山羊角召唤坐骑的最大距离（格）。仅对已加载的区块生效。")
                                 .translation("wanderlusts_way_to_survive.config.horse.goatHornSummonMaxDistance")
                                 .defineInRange("goatHornSummonMaxDistance", 128.0, 0.0, 10000.0);
+
+                goatHornSummonTeleportDistance = builder
+                                .comment("Distance from player to teleport the mount to. 0 = At player's position.")
+                                .comment("召唤时坐骑传送到玩家前方的距离（格）。0 = 玩家当前位置。")
+                                .translation("wanderlusts_way_to_survive.config.horse.goatHornSummonTeleportDistance")
+                                .defineInRange("goatHornSummonTeleportDistance", 2.5, 0.0, 16.0);
 
                 builder.pop();
 
