@@ -24,6 +24,12 @@
     "wanderlusts_way_to_survive.config.horse.horseTransparencyFadeStart": "Transparency Start Angle (Deg)",
     "wanderlusts_way_to_survive.config.horse.horseTransparencyFadeEnd": "Transparency Max Angle (Deg)",
     "wanderlusts_way_to_survive.config.horse.horseMinOpacity": "Minimum Opacity (At Max Angle)",
+    "wanderlusts_way_to_survive.config.horse.enableGoatHornSummon": "Enable Goat Horn Summon",
+    "wanderlusts_way_to_survive.config.horse.goatHornSummonMaxDistance": "Summon Max Distance (Blocks)",
+    "message.wanderlusts_way_to_survive.horn.bound": "Bound to mount: %s",
+    "message.wanderlusts_way_to_survive.horn.summoned": "Mount %s summoned",
+    "message.wanderlusts_way_to_survive.horn.not_found": "Mount not found or too far",
+    "message.wanderlusts_way_to_survive.horn.not_owner": "This mount does not belong to you",
     "wanderlusts_way_to_survive.configuration.mountedPearl": "Mounted Teleport Settings",
     "wanderlusts_way_to_survive.config.mountedPearl.enableMountedPearlTeleport": "Enable Mounted Pearl Teleport",
     "wanderlusts_way_to_survive.config.mountedPearl.mountedPearlSyncTicks": "Teleport Synchronization Ticks"

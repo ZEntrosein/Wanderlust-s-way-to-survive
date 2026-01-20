@@ -50,6 +50,9 @@ public class MomentumConfig {
         public final ModConfigSpec.DoubleValue horseTransparencyFadeEnd;
         public final ModConfigSpec.DoubleValue horseMinOpacity;
 
+        public final ModConfigSpec.BooleanValue enableGoatHornSummon;
+        public final ModConfigSpec.DoubleValue goatHornSummonMaxDistance;
+
         // ==================== 末影珍珠传送设置 ====================
         public final ModConfigSpec.BooleanValue enableMountedPearlTeleport;
         public final ModConfigSpec.IntValue mountedPearlSyncTicks;
@@ -181,6 +184,18 @@ public class MomentumConfig {
                                 .comment("完全低头时的最小不透明度。（0.0 = 不可见，1.0 = 不透明）")
                                 .translation("wanderlusts_way_to_survive.config.horse.horseMinOpacity")
                                 .defineInRange("horseMinOpacity", 0.05, 0.0, 1.0);
+
+                enableGoatHornSummon = builder
+                                .comment("Enable binding Goat Horns to mounts and summoning them.")
+                                .comment("启用山羊角绑定和召唤坐骑功能。")
+                                .translation("wanderlusts_way_to_survive.config.horse.enableGoatHornSummon")
+                                .define("enableGoatHornSummon", true);
+
+                goatHornSummonMaxDistance = builder
+                                .comment("Maximum distance (in blocks) to summon a mount via Goat Horn. Only works for loaded chunks.")
+                                .comment("山羊角召唤坐骑的最大距离（格）。仅对已加载的区块生效。")
+                                .translation("wanderlusts_way_to_survive.config.horse.goatHornSummonMaxDistance")
+                                .defineInRange("goatHornSummonMaxDistance", 128.0, 0.0, 10000.0);
 
                 builder.pop();
 

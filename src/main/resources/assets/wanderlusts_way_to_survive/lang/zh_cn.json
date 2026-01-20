@@ -24,6 +24,12 @@
     "wanderlusts_way_to_survive.config.horse.horseTransparencyFadeStart": "透明化开始角度",
     "wanderlusts_way_to_survive.config.horse.horseTransparencyFadeEnd": "透明化最大角度 (最淡)",
     "wanderlusts_way_to_survive.config.horse.horseMinOpacity": "最小不透明度 (最淡状态)",
+    "wanderlusts_way_to_survive.config.horse.enableGoatHornSummon": "启用山羊角召唤坐骑",
+    "wanderlusts_way_to_survive.config.horse.goatHornSummonMaxDistance": "召唤最大距离 (格)",
+    "message.wanderlusts_way_to_survive.horn.bound": "已绑定坐骑: %s",
+    "message.wanderlusts_way_to_survive.horn.summoned": "坐骑 %s 已召唤",
+    "message.wanderlusts_way_to_survive.horn.not_found": "未找到坐骑或距离太远",
+    "message.wanderlusts_way_to_survive.horn.not_owner": "这匹马不属于你",
     "wanderlusts_way_to_survive.configuration.mountedPearl": "骑乘传送设置",
     "wanderlusts_way_to_survive.config.mountedPearl.enableMountedPearlTeleport": "启用骑乘末影珍珠传送",
     "wanderlusts_way_to_survive.config.mountedPearl.mountedPearlSyncTicks": "传送同步 Tick 数"
