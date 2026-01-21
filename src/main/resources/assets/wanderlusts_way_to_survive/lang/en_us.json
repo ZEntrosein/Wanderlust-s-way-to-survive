@@ -49,5 +49,15 @@
     "wanderlusts_way_to_survive.config.mountedPearl.enableMountedPearlTeleport": "Enable Mounted Pearl Teleport",
     "wanderlusts_way_to_survive.config.mountedPearl.mountedPearlSyncTicks": "Teleport Synchronization Ticks",
     "wanderlusts_way_to_survive.configuration.boat_banner": "Boat Banner Settings",
-    "wanderlusts_way_to_survive.configuration.boat_banner.rendering": "Boat Banner Rendering Settings"
+    "wanderlusts_way_to_survive.configuration.boat_banner.rendering": "Boat Banner Rendering Settings",
+    "block.wanderlusts_way_to_survive.copper_rail": "Copper Rail",
+    "block.wanderlusts_way_to_survive.exposed_copper_rail": "Exposed Copper Rail",
+    "block.wanderlusts_way_to_survive.weathered_copper_rail": "Weathered Copper Rail",
+    "block.wanderlusts_way_to_survive.oxidized_copper_rail": "Oxidized Copper Rail",
+    "block.wanderlusts_way_to_survive.waxed_copper_rail": "Waxed Copper Rail",
+    "block.wanderlusts_way_to_survive.waxed_exposed_copper_rail": "Waxed Exposed Copper Rail",
+    "block.wanderlusts_way_to_survive.waxed_weathered_copper_rail": "Waxed Weathered Copper Rail",
+    "block.wanderlusts_way_to_survive.waxed_oxidized_copper_rail": "Waxed Oxidized Copper Rail",
+    "block.wanderlusts_way_to_survive.sloped_rail": "Sloped Rail",
+    "block.wanderlusts_way_to_survive.rail_crossing": "Rail Crossing"
 }

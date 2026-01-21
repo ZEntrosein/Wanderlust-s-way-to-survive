@@ -29,6 +29,14 @@ public class ModItems {
         public static final DeferredItem<BlockItem> WAXED_OXIDIZED_COPPER_RAIL = ITEMS
                         .registerSimpleBlockItem("waxed_oxidized_copper_rail", ModBlocks.WAXED_OXIDIZED_COPPER_RAIL);
 
+        // Sloped Rail - 坡道铁轨
+        public static final DeferredItem<BlockItem> SLOPED_RAIL = ITEMS.registerSimpleBlockItem("sloped_rail",
+                        ModBlocks.SLOPED_RAIL);
+
+        // Rail Crossing - 交叉铁轨
+        public static final DeferredItem<BlockItem> RAIL_CROSSING = ITEMS.registerSimpleBlockItem("rail_crossing",
+                        ModBlocks.RAIL_CROSSING);
+
         public static void register(IEventBus eventBus) {
                 ITEMS.register(eventBus);
         }

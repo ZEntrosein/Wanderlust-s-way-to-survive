@@ -2,6 +2,8 @@ package com.zeno.wanderlustswaytosurvive.registries;
 
 import com.zeno.wanderlustswaytosurvive.WanderlustsWayToSurvive;
 import com.zeno.wanderlustswaytosurvive.block.custom.CopperRailBlock;
+import com.zeno.wanderlustswaytosurvive.block.custom.RailCrossingBlock;
+import com.zeno.wanderlustswaytosurvive.block.custom.SlopedRailBlock;
 import com.zeno.wanderlustswaytosurvive.block.custom.WaxedCopperRailBlock;
 import com.zeno.wanderlustswaytosurvive.block.custom.WeatheringRailBlock;
 import net.minecraft.world.level.block.Block;
@@ -59,6 +61,16 @@ public class ModBlocks {
                         () -> new WaxedCopperRailBlock(
                                         BlockBehaviour.Properties.ofFullCopy(Blocks.POWERED_RAIL).noCollission(),
                                         WaxedCopperRailBlock.WaxedWeatherState.WAXED_OXIDIZED));
+
+        // Sloped Rail - 坡道铁轨
+        public static final DeferredBlock<Block> SLOPED_RAIL = BLOCKS.register("sloped_rail",
+                        () -> new SlopedRailBlock(
+                                        BlockBehaviour.Properties.ofFullCopy(Blocks.RAIL).noCollission()));
+
+        // Rail Crossing - 交叉铁轨
+        public static final DeferredBlock<Block> RAIL_CROSSING = BLOCKS.register("rail_crossing",
+                        () -> new RailCrossingBlock(
+                                        BlockBehaviour.Properties.ofFullCopy(Blocks.RAIL).noCollission()));
 
         public static void register(IEventBus eventBus) {
                 BLOCKS.register(eventBus);

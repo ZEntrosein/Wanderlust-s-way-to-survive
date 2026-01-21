@@ -127,6 +127,9 @@ public class WanderlustsWayToSurvive {
             event.accept(ModItems.WAXED_EXPOSED_COPPER_RAIL);
             event.accept(ModItems.WAXED_WEATHERED_COPPER_RAIL);
             event.accept(ModItems.WAXED_OXIDIZED_COPPER_RAIL);
+
+            event.accept(ModItems.SLOPED_RAIL);
+            event.accept(ModItems.RAIL_CROSSING);
         }
     }
 

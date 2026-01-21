@@ -62,5 +62,7 @@
     "wanderlusts_way_to_survive.config.copper_rails.exposedCopperRailSpeed": "斑驳铜铁轨速度",
     "wanderlusts_way_to_survive.config.copper_rails.weatheredCopperRailSpeed": "锈蚀铜铁轨速度",
     "wanderlusts_way_to_survive.config.copper_rails.oxidizedCopperRailSpeed": "氧化铜铁轨速度",
-    "wanderlusts_way_to_survive.config.copper_rails.maxAscendingSpeed": "爬坡最大速度"
+    "wanderlusts_way_to_survive.config.copper_rails.maxAscendingSpeed": "爬坡最大速度",
+    "block.wanderlusts_way_to_survive.sloped_rail": "坡道铁轨",
+    "block.wanderlusts_way_to_survive.rail_crossing": "交叉铁轨"
 }

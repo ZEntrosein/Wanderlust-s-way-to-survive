@@ -1,0 +1,16 @@
+{
+    "variants": {
+        "shape=east_west,waterlogged=false": {
+            "model": "wanderlusts_way_to_survive:block/rail_crossing"
+        },
+        "shape=east_west,waterlogged=true": {
+            "model": "wanderlusts_way_to_survive:block/rail_crossing"
+        },
+        "shape=north_south,waterlogged=false": {
+            "model": "wanderlusts_way_to_survive:block/rail_crossing"
+        },
+        "shape=north_south,waterlogged=true": {
+            "model": "wanderlusts_way_to_survive:block/rail_crossing"
+        }
+    }
+}

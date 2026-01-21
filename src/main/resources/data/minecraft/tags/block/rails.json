@@ -8,6 +8,8 @@
         "wanderlusts_way_to_survive:waxed_copper_rail",
         "wanderlusts_way_to_survive:waxed_exposed_copper_rail",
         "wanderlusts_way_to_survive:waxed_weathered_copper_rail",
-        "wanderlusts_way_to_survive:waxed_oxidized_copper_rail"
+        "wanderlusts_way_to_survive:waxed_oxidized_copper_rail",
+        "wanderlusts_way_to_survive:sloped_rail",
+        "wanderlusts_way_to_survive:rail_crossing"
     ]
 }
