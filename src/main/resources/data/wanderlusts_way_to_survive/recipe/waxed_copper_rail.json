@@ -1,0 +1,16 @@
+{
+    "type": "minecraft:crafting_shapeless",
+    "category": "redstone",
+    "ingredients": [
+        {
+            "item": "wanderlusts_way_to_survive:copper_rail"
+        },
+        {
+            "item": "minecraft:honeycomb"
+        }
+    ],
+    "result": {
+        "count": 1,
+        "id": "wanderlusts_way_to_survive:waxed_copper_rail"
+    }
+}

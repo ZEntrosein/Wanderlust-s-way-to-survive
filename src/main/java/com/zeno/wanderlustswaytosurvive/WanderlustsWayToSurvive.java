@@ -1,6 +1,8 @@
 package com.zeno.wanderlustswaytosurvive;
 
 import com.zeno.wanderlustswaytosurvive.registries.ModAttachmentTypes;
+import com.zeno.wanderlustswaytosurvive.registries.ModBlocks;
+import com.zeno.wanderlustswaytosurvive.registries.ModItems;
 
 import org.slf4j.Logger;
 
@@ -102,6 +104,10 @@ public class WanderlustsWayToSurvive {
 
         // Register Attributes
         ModAttachmentTypes.register(modEventBus);
+
+        // Register Blocks and Items
+        ModBlocks.register(modEventBus);
+        ModItems.register(modEventBus);
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {
@@ -111,9 +117,17 @@ public class WanderlustsWayToSurvive {
 
     // Add the example block item to the building blocks tab
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
-        // if (event.getTabKey() == CreativeModeTabs.BUILDING_BLOCKS) {
-        // event.accept(EXAMPLE_BLOCK_ITEM);
-        // }
+        if (event.getTabKey() == net.minecraft.world.item.CreativeModeTabs.REDSTONE_BLOCKS) {
+            event.accept(ModItems.COPPER_RAIL);
+            event.accept(ModItems.EXPOSED_COPPER_RAIL);
+            event.accept(ModItems.WEATHERED_COPPER_RAIL);
+            event.accept(ModItems.OXIDIZED_COPPER_RAIL);
+
+            event.accept(ModItems.WAXED_COPPER_RAIL);
+            event.accept(ModItems.WAXED_EXPOSED_COPPER_RAIL);
+            event.accept(ModItems.WAXED_WEATHERED_COPPER_RAIL);
+            event.accept(ModItems.WAXED_OXIDIZED_COPPER_RAIL);
+        }
     }
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call

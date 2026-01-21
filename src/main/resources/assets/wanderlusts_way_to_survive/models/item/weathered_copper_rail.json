@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "wanderlusts_way_to_survive:block/weathered_copper_rail"
+  }
+}

@@ -1,0 +1,24 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "category": "redstone",
+    "key": {
+        "C": {
+            "item": "minecraft:copper_ingot"
+        },
+        "R": {
+            "item": "minecraft:redstone"
+        },
+        "S": {
+            "item": "minecraft:stick"
+        }
+    },
+    "pattern": [
+        "C C",
+        "CSC",
+        "CRC"
+    ],
+    "result": {
+        "count": 6,
+        "id": "wanderlusts_way_to_survive:copper_rail"
+    }
+}

@@ -10,7 +10,8 @@
     "MixinItem",
     "MixinBoat",
     "MixinBoatRenderer",
-    "MixinEntityBoatDrop"
+    "MixinEntityBoatDrop",
+    "MixinAbstractMinecart"
   ],
   "injectors": {
     "defaultRequire": 1

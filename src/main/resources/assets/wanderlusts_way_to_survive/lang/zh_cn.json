@@ -49,5 +49,18 @@
     "wanderlusts_way_to_survive.config.mountedPearl.enableMountedPearlTeleport": "启用骑乘末影珍珠传送",
     "wanderlusts_way_to_survive.config.mountedPearl.mountedPearlSyncTicks": "传送同步 Tick 数",
     "wanderlusts_way_to_survive.configuration.boat_banner": "船只旗帜设置",
-    "wanderlusts_way_to_survive.configuration.boat_banner.rendering": "船只旗帜渲染设置"
+    "wanderlusts_way_to_survive.configuration.boat_banner.rendering": "船只旗帜渲染设置",
+    "block.wanderlusts_way_to_survive.copper_rail": "铜铁轨",
+    "block.wanderlusts_way_to_survive.exposed_copper_rail": "斑驳的铜铁轨",
+    "block.wanderlusts_way_to_survive.weathered_copper_rail": "锈蚀的铜铁轨",
+    "block.wanderlusts_way_to_survive.oxidized_copper_rail": "氧化的铜铁轨",
+    "block.wanderlusts_way_to_survive.waxed_copper_rail": "涂蜡铜铁轨",
+    "block.wanderlusts_way_to_survive.waxed_exposed_copper_rail": "涂蜡斑驳的铜铁轨",
+    "block.wanderlusts_way_to_survive.waxed_weathered_copper_rail": "涂蜡锈蚀的铜铁轨",
+    "block.wanderlusts_way_to_survive.waxed_oxidized_copper_rail": "涂蜡氧化的铜铁轨",
+    "wanderlusts_way_to_survive.config.copper_rails.copperSpeed": "铜铁轨速度",
+    "wanderlusts_way_to_survive.config.copper_rails.exposedCopperRailSpeed": "斑驳铜铁轨速度",
+    "wanderlusts_way_to_survive.config.copper_rails.weatheredCopperRailSpeed": "锈蚀铜铁轨速度",
+    "wanderlusts_way_to_survive.config.copper_rails.oxidizedCopperRailSpeed": "氧化铜铁轨速度",
+    "wanderlusts_way_to_survive.config.copper_rails.maxAscendingSpeed": "爬坡最大速度"
 }

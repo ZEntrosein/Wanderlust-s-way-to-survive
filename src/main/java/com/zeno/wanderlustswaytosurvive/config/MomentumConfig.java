@@ -31,6 +31,13 @@ public class MomentumConfig {
         public final ModConfigSpec.DoubleValue enchantmentLevelMultiplier;
         public final ModConfigSpec.ConfigValue<List<? extends String>> blockSpeedCaps;
 
+        // ==================== 铜铁轨设置 ====================
+        public final ModConfigSpec.DoubleValue copperRailSpeed;
+        public final ModConfigSpec.DoubleValue exposedCopperRailSpeed;
+        public final ModConfigSpec.DoubleValue weatheredCopperRailSpeed;
+        public final ModConfigSpec.DoubleValue oxidizedCopperRailSpeed;
+        public final ModConfigSpec.DoubleValue maxAscendingSpeed;
+
         // ==================== 苦力怕设置 ====================
         public final ModConfigSpec.BooleanValue enableCreeperScaling;
         public final ModConfigSpec.DoubleValue maxHealthMultiplier;
@@ -106,6 +113,41 @@ public class MomentumConfig {
                                                                 "minecraft:packed_ice,0.5"),
                                                 () -> "minecraft:block_id,0.2",
                                                 MomentumConfig::validateBlockSpeedEntry);
+
+                builder.pop();
+
+                // Copper Rail Settings
+                builder.comment("Settings for Copper Rails").push("copper_rails");
+
+                copperRailSpeed = builder
+                                .comment("Max speed for Copper Rails (Unaffected). Default: 0.8")
+                                .comment("铜铁轨（未氧化）的最大速度。默认值：0.8")
+                                .translation("wanderlusts_way_to_survive.config.copper_rails.copperSpeed")
+                                .defineInRange("copperRailSpeed", 0.8, 0.0, 5.0);
+
+                exposedCopperRailSpeed = builder
+                                .comment("Max speed for Exposed Copper Rails. Default: 0.6")
+                                .comment("斑驳铜铁轨的最大速度。默认值：0.6")
+                                .translation("wanderlusts_way_to_survive.config.copper_rails.exposedCopperRailSpeed")
+                                .defineInRange("exposedCopperRailSpeed", 0.6, 0.0, 5.0);
+
+                weatheredCopperRailSpeed = builder
+                                .comment("Max speed for Weathered Copper Rails. Default: 0.3")
+                                .comment("锈蚀铜铁轨的最大速度。默认值：0.3")
+                                .translation("wanderlusts_way_to_survive.config.copper_rails.weatheredCopperRailSpeed")
+                                .defineInRange("weatheredCopperRailSpeed", 0.3, 0.0, 5.0);
+
+                oxidizedCopperRailSpeed = builder
+                                .comment("Max speed for Oxidized Copper Rails. Default: 0.2")
+                                .comment("氧化铜铁轨的最大速度。默认值：0.2")
+                                .translation("wanderlusts_way_to_survive.config.copper_rails.oxidizedCopperRailSpeed")
+                                .defineInRange("oxidizedCopperRailSpeed", 0.2, 0.0, 5.0);
+
+                maxAscendingSpeed = builder
+                                .comment("Max speed when ascending (climbing slopes). Default: 0.5")
+                                .comment("爬坡时的最大速度。默认值：0.5")
+                                .translation("wanderlusts_way_to_survive.config.copper_rails.maxAscendingSpeed")
+                                .defineInRange("maxAscendingSpeed", 0.5, 0.0, 5.0);
 
                 builder.pop();
 
